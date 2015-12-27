@@ -9,7 +9,7 @@ Contributions from dustinbcox and theepicsnail
 from lib.functions_general import *
 from src.lib.twitch import get_dict_for_users
 from src.lib.spam_detector import spam_detector
-from src.lib.queries import *
+from src.lib.queries import Database
 import lib.irc as irc_
 import lib.functions_commands as commands
 import src.lib.command_headers
@@ -34,6 +34,8 @@ STREAM_USER = "ravenhart007"
 class Roboraj(object):
 
     def __init__(self, config):
+        self.db = Database()
+        self.db.initiate()
         self.config = config
         self.crons = crons
         src.lib.command_headers.initalizeCommands(config)

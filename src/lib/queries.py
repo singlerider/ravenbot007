@@ -3,11 +3,11 @@
 
 import sqlite3 as lite
 import sys
-users = ["user", "singlerider", "testuser"]
+test_users = ["user", "singlerider", "testuser"]
 
 class Database:
 
-    def __init__(self, name="twitch"):
+    def __init__(self, name="twitch.db"):
         self.name = name
         self.con = lite.connect(self.name)
 
@@ -39,6 +39,15 @@ class Database:
                 DELETE FROM users WHERE username = '%s';
                 """ % user)
 
+    def get_user(self, user="testuser"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                SELECT * FROM users WHERE username = '%s'
+                """ % user)
+            user_data = cur.fetchone()
+            print user_data
+
     def modify_points(self, user="testuser", points=5):
         with self.con:
             cur = self.con.cursor()
@@ -46,7 +55,7 @@ class Database:
                 UPDATE users SET points = '%d' WHERE username = '%s';
                 """ % (points, user))
 
-    def user_level(self, user="testuser", user_level="mod"):
+    def modify_user_level(self, user="testuser", user_level="mod"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
@@ -56,9 +65,10 @@ class Database:
 if __name__ == "__main__":
     db = Database("test.db")
     db.initiate()
-    db.add_user(users)
+    db.add_user(test_users)
     db.modify_points()
-    db.user_level()
-    raw_input("press enter to delete the test database")
-    for user in users:
+    db.modify_user_level()
+    db.get_user()
+    raw_input("press enter to delete the test entries")
+    for user in test_users:
         db.remove_user(user)
