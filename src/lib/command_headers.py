@@ -20,7 +20,7 @@ commands = {
         'return': 'command',
         'argc': 1,
         'usage': '!follower [username]',
-        #'ul': 'mod'
+        'ul': 'mod'
 
     },
 
@@ -45,7 +45,6 @@ commands = {
         'argc': 1,
         'return': 'command',
         'space_case': True,
-        #'ul': 'mod',
         'usage': '!popularity [name_of_game]'
     },
 
@@ -54,7 +53,7 @@ commands = {
         'argc': 1,
         'return': 'command',
         'usage': '!follow [streamer_username]',
-        #'ul': 'mod'
+        'ul': 'mod'
 
     },
 

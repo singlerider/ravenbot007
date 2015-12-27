@@ -63,7 +63,7 @@ class Roboraj(object):
                 elif message_split[1] == "subscribed" and len(message_split) < 9:
                     months_subbed = message_split[3]
                     modify_user_points(subbed_user, int(months_subbed) * 100)
-                    resp = "/me {0} has just resubscribed for {1} months straight and is getting {2} treats for loyalty!".format(
+                    resp = "/me {0} has just resubscribed for {1} months straight!".format(
                         subbed_user, months_subbed, int(months_subbed) * 100)
                     self.irc.send_message(channel, resp)
             except Exception as error:
