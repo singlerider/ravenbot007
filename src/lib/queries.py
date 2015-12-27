@@ -79,6 +79,14 @@ class Database:
                 DELETE FROM custom_commands WHERE command = '%s';
                 """ % command)
 
+    def modify_command(self, command="!test", response="different response"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                UPDATE custom_commands SET response = ?
+                    WHERE command = ?
+                """, [response, command])
+
     def increment_command(self, command="!test"):
         with self.con:
             cur = self.con.cursor()
@@ -105,6 +113,7 @@ if __name__ == "__main__":
     db.add_command()
     db.increment_command()
     db.increment_command()
+    db.modify_command()
     db.increment_command()
     print db.get_command()
     db.get_command()

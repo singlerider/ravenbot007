@@ -60,12 +60,34 @@ commands = {
         'ul': 'mod'
     },
 
-    '!points': {
+    '!cash': {
         'limit': 0,
         'argc': 3,
         'return': 'command',
-        'usage': '!points ["add"/"remove"/"set"] [username]'
-    }
+        'usage': '!points ["add"/"remove"/"set"] [username]',
+        'space_case': True
+    },
+
+    '!add': {
+        'limit': 0,
+        'argc': 3,
+        'return': 'command',
+        'usage': '!add [command] [user_level("mod"/"reg") [response]]'
+    },
+
+    '!edit': {
+        'limit': 0,
+        'argc': 3,
+        'return': 'command',
+        'usage': '!edit [command] [user_level("mod"/"reg") [response]]'
+    },
+
+    '!rem': {
+        'limit': 0,
+        'argc': 1,
+        'return': 'command',
+        'usage': '!add [command] [user_level("mod"/"reg") [response]]'
+    },
 }
 
 
