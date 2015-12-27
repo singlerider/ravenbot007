@@ -58,6 +58,13 @@ commands = {
         'return': 'command',
         'usage': '!donation [username] [dollar_amount]',
         'ul': 'mod'
+    },
+
+    '!points': {
+        'limit': 0,
+        'argc': 3,
+        'return': 'command',
+        'usage': '!points ["add"/"remove"/"set"] [username]'
     }
 }
 
