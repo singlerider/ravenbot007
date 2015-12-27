@@ -64,7 +64,7 @@ commands = {
         'limit': 0,
         'argc': 3,
         'return': 'command',
-        'usage': '!points ["add"/"remove"/"set"] [username]',
+        'usage': '!cash ["add"/"remove"/"set"] [username]',
         'space_case': True
     },
 

@@ -58,7 +58,7 @@ class Database:
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
-                UPDATE users SET points = '%d' WHERE username = '%s';
+                UPDATE users SET points = points + '%d' WHERE username = '%s';
                 """ % (points, user))
 
     def add_command(self, user="testuser", command="!test", response="{} check this out", user_level="mod"):

@@ -21,20 +21,20 @@ def get_dict_for_users(channel=None):
             channel + '/chatters'
         get_dict_for_users_resp = requests.get(url=get_dict_for_users_url)
         users = json.loads(get_dict_for_users_resp.content)
+        user_dict = users
+        all_users = []
+        for user in users['chatters']['moderators']:
+            all_users.append(str(user))
+        for user in users['chatters']['viewers']:
+            all_users.append(str(user))
+        for user in users['chatters']['staff']:
+            all_users.append(str(user))
+        for user in users['chatters']['admins']:
+            all_users.append(str(user))
+        #globals.channel_info[channel]['viewers'] = user_dict  # cache values
+        return user_dict, list(set(all_users))
     except:
-        return "Twitch's backend is down. Sorry, dawg."
-    user_dict = users
-    all_users = []
-    for user in users['chatters']['moderators']:
-        all_users.append(str(user))
-    for user in users['chatters']['viewers']:
-        all_users.append(str(user))
-    for user in users['chatters']['staff']:
-        all_users.append(str(user))
-    for user in users['chatters']['admins']:
-        all_users.append(str(user))
-    #globals.channel_info[channel]['viewers'] = user_dict  # cache values
-    return user_dict, list(set(all_users))
+        return {}, []
 
 
 def user_cron(channel):
