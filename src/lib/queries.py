@@ -19,6 +19,12 @@ class Database:
                     id INTEGER PRIMARY KEY,
                     username TEXT, points INT, user_level TEXT);
                 """)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS custom_commands(
+                    id INTEGER PRIMARY KEY,
+                    created_by TEXT, command TEXT,
+                    response TEXT, times_used INT);
+                """)
 
     def add_user(self, users):
         user_tuples = [(x, x) for x in users]
@@ -45,6 +51,7 @@ class Database:
                 SELECT * FROM users WHERE username = '%s'
                 """ % user)
             user_data = cur.fetchone()
+            return user_data
 
     def modify_points(self, user="testuser", points=5):
         with self.con:
@@ -60,13 +67,55 @@ class Database:
                 UPDATE users SET user_level = '%s' WHERE username = '%s';
                 """ % (user_level, user))
 
+    def add_command(self, user="testuser", command="!test", response="{} check this out"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                INSERT INTO custom_commands(
+                    id, created_by, command, response, times_used)
+                    SELECT NULL, ?, ?, ?, 0
+                    WHERE NOT EXISTS(
+                        SELECT 1 FROM custom_commands WHERE command = ?);
+                """, [user, command, response, command])
+
+    def remove_command(self, command="!test"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                DELETE FROM custom_commands WHERE command = '%s';
+                """ % command)
+
+    def increment_command(self, command="!test"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                UPDATE custom_commands SET times_used = times_used + 1
+                    WHERE command = "%s"
+                """ % command)
+
+    def get_command(self, command="!test"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                SELECT * FROM custom_commands WHERE command = '%s'
+                """ % command)
+            command_data = cur.fetchone()
+            return command_data
+
 if __name__ == "__main__":
     db = Database("test.db")
     db.initiate()
     db.add_user(test_users)
     db.modify_points()
     db.modify_user_level()
-    db.get_user()
+    print db.get_user()
+    db.add_command()
+    db.increment_command()
+    db.increment_command()
+    db.increment_command()
+    print db.get_command()
+    db.get_command()
     raw_input("press enter to delete the test entries")
+    db.remove_command()
     for user in test_users:
         db.remove_user(user)
