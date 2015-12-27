@@ -9,10 +9,11 @@ def edit(args):
     user_level = args[1]
     response = " ".join(args[2:])
     creator = globals.CURRENT_USER
+    channel = globals.global_channel
     if command[0] is "!":
         if command not in command_headers.commands:
             if user_level == "reg" or user_level == "mod":
-                db.modify_command(command, response)
+                db.modify_command(command, response, channel)
                 return "{0} has been changed!".format(
                     command)
             else:

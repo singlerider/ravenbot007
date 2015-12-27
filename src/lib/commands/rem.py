@@ -6,6 +6,7 @@ import globals
 def rem(args):
     db = Database()
     command = args[0].lower()
-    db.remove_command(command)
+    channel = globals.global_channel
+    db.remove_command(command, channel)
     return "{0} removed from Ravenbot007's custom commands!".format(
         command)

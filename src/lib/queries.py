@@ -21,7 +21,7 @@ class Database:
                 """)
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS custom_commands(
-                    id INTEGER PRIMARY KEY,
+                    id INTEGER PRIMARY KEY, channel TEXT,
                     created_by TEXT, command TEXT,
                     response TEXT, times_used INT
                     , user_level TEXT);
@@ -61,47 +61,51 @@ class Database:
                 UPDATE users SET points = points + '%d' WHERE username = '%s';
                 """ % (points, user))
 
-    def add_command(self, user="testuser", command="!test", response="{} check this out", user_level="mod"):
+    def add_command(self, user="testuser", command="!test", response="{} check this out", user_level="mod", channel="testuser"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
                 INSERT INTO custom_commands(
-                    id, created_by, command, response, times_used, user_level)
-                    SELECT NULL, ?, ?, ?, 0, ?
+                    id, channel, created_by, command, response, times_used, user_level)
+                    SELECT NULL, ?, ?, ?, ?, 0, ?
                     WHERE NOT EXISTS(
-                        SELECT 1 FROM custom_commands WHERE command = ?);
-                """, [user, command, response, user_level, command])
+                        SELECT 1 FROM custom_commands
+                            WHERE command = ? and channel = ?);
+                """, [channel, user, command, response, user_level, command, channel])
 
-    def remove_command(self, command="!test"):
+    def remove_command(self, command="!test", channel="testuser"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
-                DELETE FROM custom_commands WHERE command = '%s';
-                """ % command)
+                DELETE FROM custom_commands
+                    WHERE command = ? AND channel = ?;
+                """, [command, channel])
 
-    def modify_command(self, command="!test", response="different response"):
+    def modify_command(self, command="!test", response="different response", channel="testuser"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
                 UPDATE custom_commands SET response = ?
-                    WHERE command = ?
-                """, [response, command])
+                    WHERE command = ? AND channel = ?;
+                """, [response, command, channel])
 
-    def increment_command(self, command="!test"):
+    def increment_command(self, command="!test", channel="testuser"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
                 UPDATE custom_commands SET times_used = times_used + 1
-                    WHERE command = "%s"
-                """ % command)
+                    WHERE command = ? AND channel = ?;
+                """, [command, channel])
 
-    def get_command(self, command="!test"):
+    def get_command(self, command="!test", channel="testuser"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
-                SELECT * FROM custom_commands WHERE command = '%s'
-                """ % command)
+                SELECT * FROM custom_commands
+                    WHERE command = ? AND channel = ?;
+                """, [command, channel])
             command_data = cur.fetchone()
+            print command_data
             return command_data
 
 if __name__ == "__main__":

@@ -70,20 +70,24 @@ class Roboraj(object):
             except Exception as error:
                 print error
 
-        def return_custom_command(channel, message, username):
+        def return_custom_command(channel, message, username, elements):
+            print 0
             chan = channel.lstrip("#")
-            elements = get_custom_command_elements(
-                chan, message[0])
             replacement_user = username
             if len(message) > 1:
                 replacement_user = message[1]
-            resp = elements[1].replace("{}", replacement_user)
-            if elements[0] == "mod":
+                print 1
+            resp = elements[4].replace("{}", replacement_user)
+            print elements
+            if elements[6] == "mod":
+                print 2
                 user_dict, __ = get_dict_for_users()
                 if username in user_dict["chatters"]["moderators"]:
+                    print 3
                     self.irc.send_message(channel, resp)
                     increment_command_counter(chan, message[0])
-            elif elements[0] == "reg":
+            elif elements[6] == "reg":
+                print 4
                 self.irc.send_message(channel, resp)
                 increment_command_counter(chan, message[0])
 
@@ -100,14 +104,17 @@ class Roboraj(object):
                 message = message_dict['message']  # .lower()
                 username = message_dict['username']
                 globals.CURRENT_USER = username
-                if channel == STREAM_USER or channel == TEST_USER:
-                    write_to_log(channel, username, message)
-                    # check for sub message
-                    if username == "twitchnotify":
-                        check_for_sub(channel, username, message)
                 chan = channel.lstrip("#")
                 if message[0] == "!":
-                    message_split = message.split()
+                    command = message.split(" ")[0]
+                    command_data = self.db.get_command(command, chan)
+                    print channel, command, username
+                    print command_data
+                    if command_data:
+                        message_split = message.split(" ")
+                        print message_split
+                        return_custom_command(
+                            channel, message_split, username, command_data)
                     #fetch_command = get_custom_command(chan, message_split[0])
                     #if len(fetch_command) > 0:
                     #    if message_split[0] == fetch_command[0][1]:
