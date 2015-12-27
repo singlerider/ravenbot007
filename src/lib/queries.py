@@ -17,13 +17,14 @@ class Database:
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS users(
                     id INTEGER PRIMARY KEY,
-                    username TEXT, points INT, user_level TEXT);
+                    username TEXT, points INT);
                 """)
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS custom_commands(
                     id INTEGER PRIMARY KEY,
                     created_by TEXT, command TEXT,
-                    response TEXT, times_used INT);
+                    response TEXT, times_used INT
+                    , user_level TEXT);
                 """)
 
     def add_user(self, users):
@@ -31,8 +32,8 @@ class Database:
         with self.con:
             cur = self.con.cursor()
             cur.executemany("""
-                INSERT INTO users(id, username, points, user_level)
-                    SELECT NULL, ?, 0, 'reg'
+                INSERT INTO users(id, username, points)
+                    SELECT NULL, ?, 0
                     WHERE NOT EXISTS(
                         SELECT 1 FROM users WHERE username = ?);
                 """, user_tuples)
@@ -60,23 +61,16 @@ class Database:
                 UPDATE users SET points = '%d' WHERE username = '%s';
                 """ % (points, user))
 
-    def modify_user_level(self, user="testuser", user_level="mod"):
-        with self.con:
-            cur = self.con.cursor()
-            cur.execute("""
-                UPDATE users SET user_level = '%s' WHERE username = '%s';
-                """ % (user_level, user))
-
-    def add_command(self, user="testuser", command="!test", response="{} check this out"):
+    def add_command(self, user="testuser", command="!test", response="{} check this out", user_level="mod"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
                 INSERT INTO custom_commands(
-                    id, created_by, command, response, times_used)
-                    SELECT NULL, ?, ?, ?, 0
+                    id, created_by, command, response, times_used, user_level)
+                    SELECT NULL, ?, ?, ?, 0, ?
                     WHERE NOT EXISTS(
                         SELECT 1 FROM custom_commands WHERE command = ?);
-                """, [user, command, response, command])
+                """, [user, command, response, user_level, command])
 
     def remove_command(self, command="!test"):
         with self.con:
@@ -107,7 +101,6 @@ if __name__ == "__main__":
     db.initiate()
     db.add_user(test_users)
     db.modify_points()
-    db.modify_user_level()
     print db.get_user()
     db.add_command()
     db.increment_command()
