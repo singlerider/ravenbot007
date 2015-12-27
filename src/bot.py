@@ -86,13 +86,6 @@ class Roboraj(object):
                 self.irc.send_message(channel, resp)
                 increment_command_counter(chan, message[0])
 
-        def ban_for_spam(channel, user):
-            ban = "/ban {0}".format(user)
-            unban = "/unban {0}".format(user)
-            print ban, unban
-            self.irc.send_message(channel, ban)
-            self.irc.send_message(channel, unban)
-
         config = self.config
 
         while True:
@@ -111,8 +104,6 @@ class Roboraj(object):
                     # check for sub message
                     if username == "twitchnotify":
                         check_for_sub(channel, username, message)
-                    if spam_detector(username, message) == True:
-                        ban_for_spam(channel, user)
                 chan = channel.lstrip("#")
                 if message[0] == "!":
                     message_split = message.split()
