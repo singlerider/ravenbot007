@@ -43,7 +43,7 @@ def cron(channel):
 
 def cash(args):
     if len(args[0].split(" ")) == 1:
-        user = args[0]
+        user = args[0].lower()
         c = Cash()
         points = c.get(user)["points"]
         return str(points)
@@ -64,8 +64,8 @@ def cash(args):
                         return "Twitch's backend appears to be down"
                     for user in all_users:
                         c.modify([user], delta)
-                        return "Added {0} cash to {1} Conspirators".format(
-                            delta, len(all_users))
+                    return "Added {0} cash to {1} Conspirators".format(
+                        delta, len(all_users))
                 else:
                     c.modify([user], abs(delta))
                     return "Added {0} cash to {1}".format(delta, user)
