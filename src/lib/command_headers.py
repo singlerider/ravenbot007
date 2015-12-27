@@ -12,7 +12,6 @@ commands = {
         'return': 'command',
         'argc': 0,
         'usage': '!followers'
-
     },
 
     '!follower': {
@@ -21,7 +20,6 @@ commands = {
         'argc': 1,
         'usage': '!follower [username]',
         'ul': 'mod'
-
     },
 
     '!uptime': {
@@ -29,7 +27,6 @@ commands = {
         'return': 'command',
         'argc': 0,
         'usage': '!uptime'
-
     },
 
     '!stream': {
@@ -37,7 +34,6 @@ commands = {
         'return': 'command',
         'argc': 0,
         'usage': '!stream'
-
     },
 
     '!popularity': {
@@ -54,7 +50,6 @@ commands = {
         'return': 'command',
         'usage': '!follow [streamer_username]',
         'ul': 'mod'
-
     },
 
     '!donation': {
@@ -62,7 +57,7 @@ commands = {
         'argc': 2,
         'return': 'command',
         'usage': '!donation [username] [dollar_amount]',
-        #'ul': 'mod'
+        'ul': 'mod'
     }
 }
 

@@ -20,7 +20,6 @@ class Database:
                     username TEXT, points INT, user_level TEXT);
                 """)
 
-    # can only be modified via twitch api
     def add_user(self, users):
         user_tuples = [(x, x) for x in users]
         with self.con:
@@ -46,7 +45,6 @@ class Database:
                 SELECT * FROM users WHERE username = '%s'
                 """ % user)
             user_data = cur.fetchone()
-            print user_data
 
     def modify_points(self, user="testuser", points=5):
         with self.con:

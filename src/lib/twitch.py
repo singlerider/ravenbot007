@@ -3,6 +3,7 @@ import requests
 import json
 import random
 import datetime
+import time
 
 # making this comment from Github's Oval Office
 
@@ -52,28 +53,29 @@ def user_cron(channel):
 
 
 def get_stream_status(channel=None):
-    if channel != None:
-        globals.global_channel = channel.lstrip('#')
-    get_stream_status_url = 'https://api.twitch.tv/kraken/streams/' + \
-        globals.global_channel
+    if channel is None:
+        channel = "ravenhart007"
+    get_stream_status_url = 'https://api.twitch.tv/kraken/streams/' + channel
     get_stream_status_resp = requests.get(url=get_stream_status_url)
     online_data = json.loads(get_stream_status_resp.content)
     if online_data["stream"] != None:
         return True
 
 
-def get_stream_uptime():
-    if get_stream_status():
+def get_stream_uptime(channel=None):
+    if channel is None:
+        channel = "ravenhart007"
+    if get_stream_status(channel):
         format = "%Y-%m-%d %H:%M:%S"
         get_stream_uptime_url = 'https://api.twitch.tv/kraken/streams/' + \
-            globals.global_channel
+            channel
         get_stream_uptime_resp = requests.get(url=get_stream_uptime_url)
         uptime_data = json.loads(get_stream_uptime_resp.content)
         start_time = str(uptime_data['stream']['created_at']).replace(
             "T", " ").replace("Z", "")
         stripped_start_time = datetime.datetime.strptime(start_time, format)
-        time_delta = datetime.datetime.utcnow() - stripped_start_time
-        return str(time_delta)
+        time_delta = (datetime.datetime.utcnow() - stripped_start_time)
+        return str(time_delta).split(".")[0]
     else:
         return "The streamer is offline, duh."
 
