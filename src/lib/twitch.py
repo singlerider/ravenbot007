@@ -54,7 +54,7 @@ def user_cron(channel):
 
 def get_stream_status(channel=None):
     if channel is None:
-        channel = "ravenhart007"
+        channel = globals.global_channel
     get_stream_status_url = 'https://api.twitch.tv/kraken/streams/' + channel
     get_stream_status_resp = requests.get(url=get_stream_status_url)
     online_data = json.loads(get_stream_status_resp.content)
@@ -64,7 +64,7 @@ def get_stream_status(channel=None):
 
 def get_stream_uptime(channel=None):
     if channel is None:
-        channel = "ravenhart007"
+        channel = globals.global_channel
     if get_stream_status(channel):
         format = "%Y-%m-%d %H:%M:%S"
         get_stream_uptime_url = 'https://api.twitch.tv/kraken/streams/' + \
