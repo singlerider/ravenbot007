@@ -24,8 +24,7 @@ Make a copy of the example globals file:
 #### Globals and Config Files
 
 Head into src/config/config.py and enter the correct channels and cron jobs
-you'd like to run, then go into globals.py and at the very least replace the
-mysql credentials. Leave global_channel, CURRENT_USER, VARIABLE, and
+you'd like to run, then go into globals.py. Leave global_channel, CURRENT_USER, VARIABLE, and
 channel_info alone.
 
 ## Make It Do
@@ -51,7 +50,7 @@ This command will contain whatever logic needs to be carried out. You should val
 
 Let's say we want to add a command which will take two arguments, we will call it '!random' and it will take a 'minimum' and 'maximum' argument. We will limit this command to be allowed to be called every 20 seconds.
 
-Add the following to the 'commands' dictionary:
+Add the following to the 'commands' dictionary in src/lib/command_headers.py:
 
 ```python
 '!random': {
@@ -66,7 +65,7 @@ Add the following to the 'commands' dictionary:
 'limit' refers to the cooldown. The cooldown is only active per separate channel
 'argc' refers to the number of arguments a command accepts, separated by spaces. If the command does not have 'command' as its 'return' value, this is not necessary. However, even if there are no arguments and 'command' is listed, 0 should be used.
 If a command is not intended for use by moderators, there is no need for 'ul' to be included
-a 'space_case' is a special scenario where you would like a command to have a single argument, but no limits to the number of separate strings you can input, such as '!requests', wherein directly after you would type an entire set of search items, but they should not be counted as arguments. Normally, arguments are separated by spaces.
+a 'space_case' is a special scenario where you would like a command to have a single argument, but no limits to the number of separate strings you can input. Normally, arguments are separated by spaces.
 
 ## Finally
 
