@@ -42,9 +42,9 @@ def cron(channel):
 
 
 def cash(args):
+    c = Cash()
     if len(args[0].split(" ")) == 1:
         user = args[0].lower()
-        c = Cash()
         points = c.get(user)["points"]
         return str(points)
     else:
@@ -58,7 +58,6 @@ def cash(args):
             delta = int(args[2])
         except:
             return "The third keyword must be a number"
-        c = Cash()
         if action == "add" or action == "remove" or action == "set":
             if action == "add":
                 if user == "all":
