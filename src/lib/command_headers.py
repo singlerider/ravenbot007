@@ -65,8 +65,7 @@ commands = {
         'argc': 3,
         'return': 'command',
         'usage': '!cash ["add"/"remove"/"set"] [username]',
-        'space_case': True,
-        'ul': 'mod'
+        'space_case': True
     },
 
     '!add': {

@@ -48,9 +48,12 @@ def cash(args):
         points = c.get(user)["points"]
         return str(points)
     else:
+        user_dict, all_users = get_dict_for_users()
         args = args[0].split(" ")
         action = args[0].lower()
         user = args[1].lower()
+        if globals.CURRENT_USER not in user_dict["chatters"]["moderators"]:
+            return "This is a moderator-only command"
         try:
             delta = int(args[2])
         except:
@@ -59,7 +62,6 @@ def cash(args):
         if action == "add" or action == "remove" or action == "set":
             if action == "add":
                 if user == "all":
-                    user_dict, all_users = get_dict_for_users()
                     if len(all_users) < 1:
                         return "Twitch's backend appears to be down"
                     for user in all_users:
