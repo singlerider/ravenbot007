@@ -61,7 +61,7 @@ class Database:
                 UPDATE users SET points = points + '%d' WHERE username = '%s';
                 """ % (points, user))
 
-    def add_command(self, user="testuser", command="!test", response="{} check this out", user_level="mod", channel="testuser"):
+    def add_command(self, user="testuser", command="!test", response="{} check this out", user_level="reg", channel="testuser"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
@@ -81,13 +81,13 @@ class Database:
                     WHERE command = ? AND channel = ?;
                 """, [command, channel])
 
-    def modify_command(self, command="!test", response="different response", channel="testuser"):
+    def modify_command(self, command="!test", response="different response", channel="testuser", user_level="mod"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
-                UPDATE custom_commands SET response = ?
+                UPDATE custom_commands SET response = ?, user_level = ?
                     WHERE command = ? AND channel = ?;
-                """, [response, command, channel])
+                """, [response, user_level, command, channel])
 
     def increment_command(self, command="!test", channel="testuser"):
         with self.con:
@@ -105,22 +105,23 @@ class Database:
                     WHERE command = ? AND channel = ?;
                 """, [command, channel])
             command_data = cur.fetchone()
-            print command_data
             return command_data
 
 if __name__ == "__main__":
     db = Database("test.db")
     db.initiate()
     db.add_user(test_users)
+    print db.get_user()
     db.modify_points()
     print db.get_user()
     db.add_command()
     db.increment_command()
+    print db.get_command()
     db.increment_command()
     db.modify_command()
+    print db.get_command()
     db.increment_command()
     print db.get_command()
-    db.get_command()
     raw_input("press enter to delete the test entries")
     db.remove_command()
     for user in test_users:

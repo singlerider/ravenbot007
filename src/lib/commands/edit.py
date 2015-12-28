@@ -15,7 +15,7 @@ def edit(args):
             command_data = db.get_command(command, channel)
             if command_data:
                 if user_level == "reg" or user_level == "mod":
-                    db.modify_command(command, response, channel)
+                    db.modify_command(command, response, channel, user_level)
                     return "{0} has been changed!".format(
                         command)
                 else:
