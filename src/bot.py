@@ -58,36 +58,30 @@ class Roboraj(object):
                 subbed_user = message_split[0]
                 if message_split[1] == "just" and len(message_split) < 4:
                     modify_user_points(subbed_user, 100)
-                    resp = "/me {0} treats for {1} for a first time subscription!".format(
-                        100, subbed_user)
+                    resp = "/me {0} just subscribed for the first time!".format(
+                        subbed_user)
                     self.irc.send_message(channel, resp)
                 elif message_split[1] == "subscribed" and len(message_split) < 9:
                     months_subbed = message_split[3]
                     modify_user_points(subbed_user, int(months_subbed) * 100)
                     resp = "/me {0} has just resubscribed for {1} months straight!".format(
-                        subbed_user, months_subbed, int(months_subbed) * 100)
+                        subbed_user, months_subbed)
                     self.irc.send_message(channel, resp)
             except Exception as error:
                 print error
 
         def return_custom_command(channel, message, username, elements):
-            print 0
             chan = channel.lstrip("#")
             replacement_user = username
             if len(message) > 1:
                 replacement_user = message[1]
-                print 1
             resp = elements[4].replace("{}", replacement_user)
-            print elements
             if elements[6] == "mod":
-                print 2
                 user_dict, __ = get_dict_for_users()
                 if username in user_dict["chatters"]["moderators"]:
-                    print 3
                     self.irc.send_message(channel, resp)
                     increment_command_counter(chan, message[0])
             elif elements[6] == "reg":
-                print 4
                 self.irc.send_message(channel, resp)
                 increment_command_counter(chan, message[0])
 
@@ -115,12 +109,6 @@ class Roboraj(object):
                         print message_split
                         return_custom_command(
                             channel, message_split, username, command_data)
-                    #fetch_command = get_custom_command(chan, message_split[0])
-                    #if len(fetch_command) > 0:
-                    #    if message_split[0] == fetch_command[0][1]:
-                    #        return_custom_command(
-                    #            channel, message_split, username)
-                # check if message is a command with no arguments
                 part = message.split(' ')[0]
                 valid = False
                 if commands.is_valid_command(message):
