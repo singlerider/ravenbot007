@@ -13,9 +13,6 @@ def get_dict_for_users(channel=None):
     if channel is None:
         channel = globals.global_channel
     channel = channel.lstrip('#')
-    #if 'viewers' in globals.channel_info[channel] and channel == "curvyllama":
-    #        users = globals.channel_info[channel]['viewers']  # cached users
-    #else:
     try:
         get_dict_for_users_url = 'http://tmi.twitch.tv/group/user/' + \
             channel + '/chatters'
@@ -31,7 +28,6 @@ def get_dict_for_users(channel=None):
             all_users.append(str(user))
         for user in users['chatters']['admins']:
             all_users.append(str(user))
-        #globals.channel_info[channel]['viewers'] = user_dict  # cache values
         return user_dict, list(set(all_users))
     except:
         return {}, []

@@ -34,10 +34,6 @@ def command_user_level(command):
     if commands[command]['ul']:
         return True
 
-# def get_user_level(username, channel):
-#	if '+o' is in data.stream:
-#		return True
-
 
 def check_has_return(command):
     if commands[command]['return'] and commands[command]['return'] != 'command':
@@ -67,11 +63,7 @@ def check_has_correct_args(message, command):
     argc = commands[command]['argc']
 
     if check_is_space_case(message):
-        # As long as it has a length > 1
         message_without_command = message[len(command):]
-        # Cool show
-        # length of string wihtout command will have one space and one
-        # character min
         return len(message_without_command) > 2
     message = message.split(' ')
     if len(message) - 1 == argc:
@@ -95,12 +87,8 @@ def check_returns_function(command):
 def pass_to_function(command, args):
     try:
         command = command[1:]
-        # print("command:", command)
-        # print(dir(src.lib.commands))
         module = getattr(src.lib.commands, command)
-        # print("module:", module)
         function = getattr(module, command)
-        # print("Function:", function)
         if args:
             return function(args)
         else:
