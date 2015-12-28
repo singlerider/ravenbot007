@@ -8,7 +8,6 @@ def rem(args):
     command = args[0].lower()
     channel = globals.global_channel
     command_data = db.get_command(command, channel)
-    print channel
     if command_data:
         db.remove_command(command, channel)
         return "{0} removed from Ravenbot007's custom commands!".format(

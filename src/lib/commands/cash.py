@@ -11,19 +11,16 @@ class Cash:
         self.db.add_user(all_users)
         for user in all_users:
             self.db.modify_points([user], points)
-        print "added points to {0}".format(users)
         return {"users": all_users, "points": points}
 
     def add(self, users, points):
         self.db.add_user(users)
         self.db.modify_points(users[0], points)
-        print "added {0} points to {1}".format(points)
         return {"user": users[0], "points": points}
 
     def modify(self, users, points):
         self.db.add_user(users)
         self.db.modify_points(users[0], points)
-        print "modified {0}'s points by {1}".format(users[0], points)
         return {"user": users[0], "points": points}
 
     def get(self, user):
