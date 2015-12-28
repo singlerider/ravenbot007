@@ -1,9 +1,9 @@
 """
-Intricate Chat Bot for Twitch.tv
+Custom Twitch Chat Moderator Bot for Twitch.tv
 
 By Shane Engelman <me@5h4n3.com>
 
-Contributions from dustinbcox and theepicsnail
+Made for twitch.tv/ravenhart007
 """
 
 from lib.functions_general import *
@@ -57,33 +57,40 @@ class Roboraj(object):
                 message_split = message.rstrip("!").split()
                 subbed_user = message_split[0]
                 if message_split[1] == "just" and len(message_split) < 4:
-                    modify_user_points(subbed_user, 100)
+                    # modify_user_points(subbed_user, 100)
                     resp = "/me {0} just subscribed for the first time!".format(
                         subbed_user)
                     self.irc.send_message(channel, resp)
                 elif message_split[1] == "subscribed" and len(message_split) < 9:
                     months_subbed = message_split[3]
-                    modify_user_points(subbed_user, int(months_subbed) * 100)
+                    # modify_user_points(subbed_user, int(months_subbed) * 100)
                     resp = "/me {0} has just resubscribed for {1} months straight!".format(
                         subbed_user, months_subbed)
                     self.irc.send_message(channel, resp)
             except Exception as error:
                 print error
 
-        def return_custom_command(channel, message, username, elements):
+        def custom_command(channel, message, username, elements):
+            db = Database()
+            command = elements[3]
+            print command, elements
             chan = channel.lstrip("#")
             replacement_user = username
             if len(message) > 1:
                 replacement_user = message[1]
-            resp = elements[4].replace("{}", replacement_user)
             if elements[6] == "mod":
                 user_dict, __ = get_dict_for_users()
                 if username in user_dict["chatters"]["moderators"]:
+                    resp = elements[4].replace("{}", replacement_user)
                     self.irc.send_message(channel, resp)
-                    increment_command_counter(chan, message[0])
+                    db.increment_command(command, chan)
+                else:
+                    resp = "This is a moderator-only command"
+                    self.irc.send_message(channel, resp)
             elif elements[6] == "reg":
+                resp = elements[4].replace("{}", replacement_user)
                 self.irc.send_message(channel, resp)
-                increment_command_counter(chan, message[0])
+                db.increment_command(command, chan)
 
         config = self.config
 
@@ -102,12 +109,9 @@ class Roboraj(object):
                 if message[0] == "!":
                     command = message.split(" ")[0]
                     command_data = self.db.get_command(command, chan)
-                    print channel, command, username
-                    print command_data
                     if command_data:
                         message_split = message.split(" ")
-                        print message_split
-                        return_custom_command(
+                        custom_command(
                             channel, message_split, username, command_data)
                 part = message.split(' ')[0]
                 valid = False
@@ -173,14 +177,11 @@ class Roboraj(object):
                     f.write(error_message)
         approved_channels = [STREAM_USER, BOT_USER, TEST_USER]
         if globals.global_channel not in approved_channels:
-            print globals.global_channel
             prevented_list = []
             if command.lstrip("!") in prevented_list:
                 return
         result = commands.pass_to_function(command, args)
         commands.update_last_used(command, channel)
-        # pbot("Command %s(%s) had a result of %s" % (
-        #         command, args, result), channel)
         if result:
             resp = '(%s) : %s' % (username, result)
             pbot(resp, channel)

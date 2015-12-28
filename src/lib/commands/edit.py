@@ -12,12 +12,16 @@ def edit(args):
     channel = globals.global_channel
     if command[0] is "!":
         if command not in command_headers.commands:
-            if user_level == "reg" or user_level == "mod":
-                db.modify_command(command, response, channel)
-                return "{0} has been changed!".format(
-                    command)
+            command_data = db.get_command(command, channel)
+            if command_data:
+                if user_level == "reg" or user_level == "mod":
+                    db.modify_command(command, response, channel)
+                    return "{0} has been changed!".format(
+                        command)
+                else:
+                    return "User level must be 'reg' or 'mod'"
             else:
-                return "User level must be 'reg' or 'mod'"
+                return "{0} not found.".format(command)
         else:
             return "{0} already built in to Ravenbot007.".format(command)
     else:
