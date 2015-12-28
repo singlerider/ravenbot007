@@ -6,6 +6,8 @@ http://www.twitch.tv/ravenhart007
 
 This is a Twitch chat/irc bot written in Python (2.6 / 2.7).
 
+![Screencapture GIF](http://i.imgur.com/eLzyojy.gif?1)![Screencapture GIF](http://i.imgur.com/YjObviU.gif)
+
 ## Installation
 
 ### Steps
