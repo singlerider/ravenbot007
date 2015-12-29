@@ -113,6 +113,7 @@ class Roboraj(object):
                         message_split = message.split(" ")
                         custom_command(
                             channel, message_split, username, command_data)
+                check_for_sub(channel, username, message)
                 part = message.split(' ')[0]
                 valid = False
                 if commands.is_valid_command(message):
