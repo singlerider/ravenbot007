@@ -98,7 +98,6 @@ def check_returns_function(command):
 
 def pass_to_function(command, args):
     try:
-        print "COMMAND ATTRIBUTES", command, args
         if len(command) < 2:
             command = []
         else:
@@ -110,9 +109,7 @@ def pass_to_function(command, args):
         else:
             if check_has_optional_args("!" + command.lstrip("!")):
                 function = getattr(module, command)
-                print "FUNCTION", function
                 args = []
-                print args
                 return function(args)
             return function()
     except Exception as error:

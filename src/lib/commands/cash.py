@@ -1,6 +1,8 @@
 from src.lib.twitch import *
 from src.lib.queries import Database
 
+TEST_USER = "singlerider"
+
 
 class Cash:
     def __init__(self):
@@ -37,7 +39,6 @@ def cron(channel):
     points_added_to = c.add_all(channel, 1)
     print "performed points cron"
 
-TEST_USER = "singlerider"
 
 def cash(args):
     c = Cash()
@@ -56,7 +57,6 @@ def cash(args):
         user = args[1].lower()
         if globals.CURRENT_USER not in user_dict["chatters"]["moderators"]:
             if globals.CURRENT_USER != TEST_USER:
-                print TEST_USER
                 return "This is a moderator-only command"
         try:
             delta = int(args[2])
