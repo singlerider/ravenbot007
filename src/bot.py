@@ -32,6 +32,7 @@ BOT_USER = "ravenbot007"
 TEST_USER = "singlerider"
 STREAM_USER = "ravenhart007"
 
+
 class Roboraj(object):
 
     def __init__(self, config):
@@ -113,6 +114,7 @@ class Roboraj(object):
                         message_split = message.split(" ")
                         custom_command(
                             channel, message_split, username, command_data)
+                check_for_sub(channel, username, message)
                 part = message.split(' ')[0]
                 valid = False
                 if commands.is_valid_command(message):
