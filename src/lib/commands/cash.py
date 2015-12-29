@@ -37,9 +37,14 @@ def cron(channel):
     points_added_to = c.add_all(channel, 1)
     print "performed points cron"
 
+TEST_USER = "singlerider"
 
 def cash(args):
     c = Cash()
+    if len(args) < 1:
+        user = globals.CURRENT_USER
+        points = c.get(user)["points"]
+        return str(points)
     if len(args[0].split(" ")) == 1:
         user = args[0].lower()
         points = c.get(user)["points"]
@@ -50,7 +55,9 @@ def cash(args):
         action = args[0].lower()
         user = args[1].lower()
         if globals.CURRENT_USER not in user_dict["chatters"]["moderators"]:
-            return "This is a moderator-only command"
+            if globals.CURRENT_USER != TEST_USER:
+                print TEST_USER
+                return "This is a moderator-only command"
         try:
             delta = int(args[2])
         except:

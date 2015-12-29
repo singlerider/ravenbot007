@@ -56,20 +56,32 @@ def check_is_space_case(command):
     return commands[command].get("space_case", False)
 
 
+def check_has_optional_args(command):
+    if "optional" in commands[command]:
+        return True
+    else:
+        return False
+
+
 def check_has_correct_args(message, command):
     """Check to see if message has the correct number of arguments,
     if the commands[command]['argc'] == 1 then we can handle spaces, otherwise
     arguments are seperated by spaces"""
     argc = commands[command]['argc']
 
-    if check_is_space_case(message):
+    if check_has_optional_args(command):
         message_without_command = message[len(command):]
-        return len(message_without_command) > 2
-    message = message.split(' ')
-    if len(message) - 1 == argc:
-        return True
+        return len(message_without_command) - 1
+
     else:
-        return False
+        if check_is_space_case(message):
+            message_without_command = message[len(command):]
+            return len(message_without_command) > 2
+        message = message.split(' ')
+        if len(message) - 1 == argc:
+            return True
+        else:
+            return False
 
 
 def check_has_ul(username, command):
@@ -86,17 +98,28 @@ def check_returns_function(command):
 
 def pass_to_function(command, args):
     try:
-        command = command[1:]
+        print "COMMAND ATTRIBUTES", command, args
+        if len(command) < 2:
+            command = []
+        else:
+            command = command[1:]
         module = getattr(src.lib.commands, command)
         function = getattr(module, command)
         if args:
             return function(args)
         else:
+            if check_has_optional_args("!" + command.lstrip("!")):
+                function = getattr(module, command)
+                print "FUNCTION", function
+                args = []
+                print args
+                return function(args)
             return function()
     except Exception as error:
         print >> sys.stdout, str(error)
         traceback.print_exc(file=sys.stdout)
         try:
-            return "How to use " + command + ": " + commands['!' + command]['usage']
+            return "How to use " + command + ": " + commands[
+                '!' + command]['usage']
         except:
             return "Command Unavailable"
