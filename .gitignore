@@ -8,5 +8,4 @@ globals.py
 log/*
 src/lib/trivia/*
 src/logs/*
-**.txt
 venv/*
