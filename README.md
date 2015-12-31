@@ -84,6 +84,7 @@ Add the following to the `'commands'` dictionary in `src/lib/command_headers.py`
 ```python
 '!random': {
 		'limit': 20,
+		'user_limit': 15,
 		'argc': 2,
 		'return': 'command',
 		'ul': 'mod',
@@ -93,6 +94,8 @@ Add the following to the `'commands'` dictionary in `src/lib/command_headers.py`
 ```
 
 `'limit'` refers to the cooldown. The cooldown is only active per separate channel
+
+`'user_limit'` is the same as `'limit'`, but affects individual users
 
 `'argc'` refers to the number of arguments a command accepts, separated by spaces. If the command does not have `'command'` as its `'return'` value, this is not necessary. However, even if there are no arguments and `'command'` is listed, `0` should be used.
 
