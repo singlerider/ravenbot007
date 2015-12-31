@@ -6,7 +6,7 @@ def addquote(args):
     db = Database()
     user = globals.CURRENT_USER
     channel = globals.global_channel
-    quote = args[0].strip().strip("\"").strip("\'")
+    quote = unicode(args[0].strip().strip("\"").strip("\'"), 'utf-8')
     game = get_stream_game(channel)
     db.add_quote(channel, user, quote, game)
     return "{0} added!".format(quote)

@@ -6,6 +6,7 @@ By Shane Engelman <me@5h4n3.com>
 Made for twitch.tv/ravenhart007
 """
 
+import sys
 from lib.functions_general import *
 from src.lib.twitch import get_dict_for_users
 from src.lib.spam_detector import spam_detector
@@ -24,6 +25,8 @@ import threading
 import os
 import src.config.crons as crons
 import globals
+reload(sys)
+sys.setdefaultencoding("utf8")
 
 
 END = False
