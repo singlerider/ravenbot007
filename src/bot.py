@@ -74,7 +74,6 @@ class Roboraj(object):
         def custom_command(channel, message, username, elements):
             db = Database()
             command = elements[3]
-            print command, elements
             chan = channel.lstrip("#")
             replacement_user = username
             if len(message) > 1:
@@ -96,36 +95,38 @@ class Roboraj(object):
         config = self.config
 
         while True:
-            try:
-                data = self.irc.nextMessage()
-                if not self.irc.check_for_message(data):
-                    continue
-                message_dict = self.irc.get_message(data)
-                channel = message_dict['channel']
-                globals.global_channel = channel.lstrip('#')
-                message = message_dict['message']  # .lower()
-                username = message_dict['username']
-                globals.CURRENT_USER = username
-                chan = channel.lstrip("#")
-                if message[0] == "!":
-                    command = message.split(" ")[0]
-                    command_data = self.db.get_command(command, chan)
-                    if command_data:
-                        message_split = message.split(" ")
-                        custom_command(
-                            channel, message_split, username, command_data)
+            #try:
+            data = self.irc.nextMessage()
+            if not self.irc.check_for_message(data):
+                continue
+            message_dict = self.irc.get_message(data)
+            channel = message_dict['channel']
+            globals.global_channel = channel.lstrip('#')
+            message = message_dict['message']  # .lower()
+            username = message_dict['username']
+            globals.CURRENT_USER = username
+            chan = channel.lstrip("#")
+            if message[0] == "!":
+                command = message.split(" ")[0]
+                command_data = self.db.get_command(command, chan)
+                if command_data:
+                    message_split = message.split(" ")
+                    custom_command(
+                        channel, message_split, username, command_data)
+            if username == "twitchnotify":
                 check_for_sub(channel, username, message)
-                part = message.split(' ')[0]
-                valid = False
-                if commands.is_valid_command(message):
-                    valid = True
-                if commands.is_valid_command(part):
-                    valid = True
-                if not valid:
-                    continue
-                self.handleCommand(part, channel, username, message)
-            except Exception as error:
-                print error
+            part = message.split(' ')[0]
+            valid = False
+            if commands.is_valid_command(message):
+                valid = True
+            if commands.is_valid_command(part):
+                valid = True
+            if not valid:
+                continue
+            self.handleCommand(part, channel, username, message)
+            #except Exception as error:
+            #    #print error
+            #    raise error
 
     def handleCommand(self, command, channel, username, message):
         # parse arguments
@@ -151,6 +152,15 @@ class Roboraj(object):
                 command, username, commands.get_cooldown_remaining(
                     command, channel)), channel)
             return
+        if commands.check_has_user_cooldown(command):
+            if commands.is_on_user_cooldown(command, channel, username):
+                #resp = "Chill out! You've got " + str(
+                #    commands.get_user_cooldown_remaining(
+                #        command, channel, username)) + \
+                #    " seconds before you can do that again, " + username + "!"
+                #self.irc.send_message(channel, resp)
+                return
+            commands.update_user_last_used(command, channel, username)
         pbot('Command is valid and not on cooldown. (%s) (%s)' %
              (command, username), channel)
         # Check for and handle the simple non-command case.

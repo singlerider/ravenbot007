@@ -26,7 +26,8 @@ commands = {
         'limit': 15,
         'return': 'command',
         'argc': 0,
-        'usage': '!uptime'
+        'usage': '!uptime',
+        'user_limit': 5
     },
 
     '!stream': {
@@ -89,11 +90,23 @@ commands = {
         'return': 'command',
         'usage': '!add [command] [user_level("mod"/"reg") [response]]'
     },
+
+    '!test': {
+        'limit': 0,
+        'user_limit': 15,
+        'return': "NOT ON COOLDOWN, apparently"
+    }
 }
+
+user_cooldowns = {"channels": {}}
 
 
 def initalizeCommands(config):
     for channel in config['channels']:
+        user_cooldowns["channels"][channel] = {"commands": {}}
         for command in commands:
             commands[command][channel] = {}
             commands[command][channel]['last_used'] = 0
+            if "user_limit" in commands[command]:
+                user_cooldowns["channels"][channel]["commands"][command] = {
+                    "users": {}}
