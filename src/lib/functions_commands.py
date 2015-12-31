@@ -115,6 +115,7 @@ def check_has_correct_args(message, command):
     if the commands[command]["argc"] == 1 then we can handle spaces, otherwise
     arguments are seperated by spaces"""
     argc = commands[command]["argc"]
+    print argc
 
     if check_has_optional_args(command):
         message_without_command = message[len(command):]

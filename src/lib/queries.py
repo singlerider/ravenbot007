@@ -26,6 +26,12 @@ class Database:
                     response TEXT, times_used INT
                     , user_level TEXT);
                 """)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS quotes(
+                    id INTEGER PRIMARY KEY, channel TEXT,
+                    created_by TEXT, quote TEXT,
+                    quote_number INT, game TEXT);
+                """)
 
     def add_user(self, users):
         user_tuples = [(x, x) for x in users]
@@ -107,6 +113,43 @@ class Database:
             command_data = cur.fetchone()
             return command_data
 
+    """
+        CREATE TABLE IF NOT EXISTS quotes(
+            id INTEGER PRIMARY KEY, channel TEXT,
+            created_by TEXT, quote TEXT,
+            quote_number INT);
+    """
+
+    def add_quote(
+            self, channel="testchannel", user="testuser",
+            quote="quote", game="testgame"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                SELECT count(0) FROM quotes WHERE channel = '%s'
+                """ % channel)
+            count = cur.fetchone()[0]
+            cur.execute("""
+                INSERT INTO quotes VALUES (NULL, ?, ?, ?, ?, ?)
+                """, [channel, user, quote, count + 1, game])
+
+    def remove_quotes(self, channel="testchannel"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                DELETE FROM quotes WHERE channel = '%s'
+                """ % channel)
+
+    def get_quote(self, channel="testchannel"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1;
+                """)
+            quote = cur.fetchone()
+            return quote
+
+
 if __name__ == "__main__":
     db = Database("test.db")
     db.initiate()
@@ -122,7 +165,10 @@ if __name__ == "__main__":
     print db.get_command()
     db.increment_command()
     print db.get_command()
+    db.add_quote()
+    print db.get_quote()
     raw_input("press enter to delete the test entries")
     db.remove_command()
     for user in test_users:
         db.remove_user(user)
+    db.remove_quotes()

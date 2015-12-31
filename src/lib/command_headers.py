@@ -67,7 +67,8 @@ commands = {
         'return': 'command',
         'usage': '!cash ["add"/"remove"/"set"] [username]',
         'space_case': True,
-        'optional': True
+        'optional': True,
+
     },
 
     '!add': {
@@ -94,7 +95,25 @@ commands = {
     '!test': {
         'limit': 0,
         'user_limit': 15,
-        'return': "NOT ON COOLDOWN, apparently"
+        'return': "NOT ON COOLDOWN, apparently",
+        'usage': '!test'
+    },
+
+    '!addquote': {
+        'limit': 0,
+        'argc': 1,
+        'user_limit': 15,
+        'return': 'command',
+        'usage': '!addquote [quote]',
+        'space_case': True
+    },
+
+    '!quote': {
+        'limit': 0,
+        'argc': 0,
+        'user_limit': 5,
+        'return': 'command',
+        'usage': '!quote'
     }
 }
 
