@@ -98,38 +98,37 @@ class Roboraj(object):
         config = self.config
 
         while True:
-            #try:
-            data = self.irc.nextMessage()
-            if not self.irc.check_for_message(data):
-                continue
-            message_dict = self.irc.get_message(data)
-            channel = message_dict['channel']
-            globals.global_channel = channel.lstrip('#')
-            message = message_dict['message']  # .lower()
-            username = message_dict['username']
-            globals.CURRENT_USER = username
-            chan = channel.lstrip("#")
-            if message[0] == "!":
-                command = message.split(" ")[0]
-                command_data = self.db.get_command(command, chan)
-                if command_data:
-                    message_split = message.split(" ")
-                    custom_command(
-                        channel, message_split, username, command_data)
-            if username == "twitchnotify":
-                check_for_sub(channel, username, message)
-            part = message.split(' ')[0]
-            valid = False
-            if commands.is_valid_command(message):
-                valid = True
-            if commands.is_valid_command(part):
-                valid = True
-            if not valid:
-                continue
-            self.handleCommand(part, channel, username, message)
-            #except Exception as error:
-            #    #print error
-            #    raise error
+            try:
+                data = self.irc.nextMessage()
+                if not self.irc.check_for_message(data):
+                    continue
+                message_dict = self.irc.get_message(data)
+                channel = message_dict['channel']
+                globals.global_channel = channel.lstrip('#')
+                message = message_dict['message']  # .lower()
+                username = message_dict['username']
+                globals.CURRENT_USER = username
+                chan = channel.lstrip("#")
+                if message[0] == "!":
+                    command = message.split(" ")[0]
+                    command_data = self.db.get_command(command, chan)
+                    if command_data:
+                        message_split = message.split(" ")
+                        custom_command(
+                            channel, message_split, username, command_data)
+                if username == "twitchnotify":
+                    check_for_sub(channel, username, message)
+                part = message.split(' ')[0]
+                valid = False
+                if commands.is_valid_command(message):
+                    valid = True
+                if commands.is_valid_command(part):
+                    valid = True
+                if not valid:
+                    continue
+                self.handleCommand(part, channel, username, message)
+            except Exception as error:
+                print error
 
     def handleCommand(self, command, channel, username, message):
         # parse arguments

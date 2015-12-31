@@ -30,12 +30,6 @@ def get_cooldown_remaining(command, channel):
     return round(commands[command]["limit"] - (time.time() - commands[command][channel]["last_used"]))
 
 
-def get_user_command_limit(command, username):
-    # user_cooldowns["channels"][channel]["commands"][command] = {
-    #    "users": {}}
-    return commands[command]["limit"]
-
-
 def check_has_user_cooldown(command):
     if "user_limit" in commands[command]:
         return True
@@ -44,28 +38,16 @@ def check_has_user_cooldown(command):
 
 
 def is_on_user_cooldown(command, channel, username):
-    # user_cooldowns["channels"][channel]["commands"][command] = {
-    #    "users": {}}
     if username not in user_cooldowns["channels"][channel]["commands"][
             command]["users"]:
-        print 0
         return False
     elif time.time() - user_cooldowns["channels"][channel]["commands"][
             command]["users"][username] < commands[command]["user_limit"]:
-        print 1, time.time() - user_cooldowns["channels"][channel]["commands"][
-                command]["users"][username]
-        print user_cooldowns
         return True
-    print 2, time.time() - user_cooldowns["channels"][channel]["commands"][
-            command]["users"][username]
-    print user_cooldowns
     return False
 
 
 def get_user_cooldown_remaining(command, channel, username):
-    # user_cooldowns["channels"][channel]["commands"][command] = {
-    #    "users": {}}
-    print 4
     time_remaining = int(round(commands[command]["user_limit"] - (
         time.time() - user_cooldowns["channels"][channel]["commands"][
                 command]["users"][username])))
@@ -115,7 +97,6 @@ def check_has_correct_args(message, command):
     if the commands[command]["argc"] == 1 then we can handle spaces, otherwise
     arguments are seperated by spaces"""
     argc = commands[command]["argc"]
-    print argc
 
     if check_has_optional_args(command):
         message_without_command = message[len(command):]
