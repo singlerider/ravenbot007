@@ -137,12 +137,10 @@ class Roboraj(object):
         # turns into
         #   command = "!foo", args=["bar baz"]
         # otherwise it turns into
-        #   command = "!foo", args=["bar", "baz:]
+        #   command = "!foo", args=["bar", "baz"]
         # print("Inputs:", command, channel, username, message)
         if command == message:
             args = []
-        elif command == message and command in commands.keys():
-            print "Yes, it is in commands"
         else:
             # default to args = ["bar baz"]
             args = [message[len(command) + 1:]]

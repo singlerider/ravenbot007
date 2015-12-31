@@ -5,6 +5,7 @@ import sqlite3 as lite
 import sys
 test_users = ["user", "singlerider", "testuser"]
 
+
 class Database:
 
     def __init__(self, name="twitch.db"):
@@ -67,12 +68,16 @@ class Database:
                 UPDATE users SET points = points + '%d' WHERE username = '%s';
                 """ % (points, user))
 
-    def add_command(self, user="testuser", command="!test", response="{} check this out", user_level="reg", channel="testuser"):
+    def add_command(
+            self, user="testuser", command="!test",
+            response="{} check this out", user_level="reg",
+            channel="testuser"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
                 INSERT INTO custom_commands(
-                    id, channel, created_by, command, response, times_used, user_level)
+                    id, channel, created_by, command, response,
+                    times_used, user_level)
                     SELECT NULL, ?, ?, ?, ?, 0, ?
                     WHERE NOT EXISTS(
                         SELECT 1 FROM custom_commands
@@ -87,7 +92,9 @@ class Database:
                     WHERE command = ? AND channel = ?;
                 """, [command, channel])
 
-    def modify_command(self, command="!test", response="different response", channel="testuser", user_level="mod"):
+    def modify_command(
+            self, command="!test", response="different response",
+            channel="testuser", user_level="mod"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
@@ -112,13 +119,6 @@ class Database:
                 """, [command, channel])
             command_data = cur.fetchone()
             return command_data
-
-    """
-        CREATE TABLE IF NOT EXISTS quotes(
-            id INTEGER PRIMARY KEY, channel TEXT,
-            created_by TEXT, quote TEXT,
-            quote_number INT);
-    """
 
     def add_quote(
             self, channel="testchannel", user="testuser",

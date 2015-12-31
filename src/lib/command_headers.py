@@ -67,8 +67,7 @@ commands = {
         'return': 'command',
         'usage': '!cash ["add"/"remove"/"set"] [username]',
         'space_case': True,
-        'optional': True,
-
+        'optional': True
     },
 
     '!add': {
