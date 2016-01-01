@@ -113,6 +113,13 @@ commands = {
         'user_limit': 5,
         'return': 'command',
         'usage': '!quote'
+    },
+
+    '!gamble': {
+        'limit': 0,
+        'argc': 0,
+        'return': 'command',
+        'usage': '!gamble'
     }
 }
 

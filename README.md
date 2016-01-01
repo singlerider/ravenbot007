@@ -51,8 +51,7 @@ Make a copy of the example globals file:
 #### Globals and Config Files
 
 Head into `src/config/config.py` and enter the correct channels and cron jobs
-you'd like to run, then go into globals.py. Leave `global_channel`, `CURRENT_USER`, `VARIABLE`, and
-`channel_info` alone.
+you'd like to run, then go into globals.py. Leave `global_channel`, `CURRENT_USER`, `VARIABLE`, `channel_info`, and `irc` alone.
 
 ## Make It Do
 

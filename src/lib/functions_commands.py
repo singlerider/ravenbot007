@@ -57,7 +57,6 @@ def get_user_cooldown_remaining(command, channel, username):
 def update_user_last_used(command, channel, username):
     user_cooldowns["channels"][channel]["commands"][
             command]["users"][username] = time.time()
-    print "UPDATED LAST USED TO", time.time()
 
 def command_user_level(command):
     if commands[command]["ul"]:

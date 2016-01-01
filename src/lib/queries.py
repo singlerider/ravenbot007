@@ -82,7 +82,8 @@ class Database:
                     WHERE NOT EXISTS(
                         SELECT 1 FROM custom_commands
                             WHERE command = ? and channel = ?);
-                """, [channel, user, command, response, user_level, command, channel])
+                """, [channel, user, command, response,
+                        user_level, command, channel])
 
     def remove_command(self, command="!test", channel="testuser"):
         with self.con:

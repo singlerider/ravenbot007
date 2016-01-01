@@ -1,7 +1,7 @@
 """
 Custom Twitch Chat Moderator Bot for Twitch.tv
 
-By Shane Engelman <me@5h4n3.com>
+By Shane Engelman me@5h4n3.com @shaneengelman
 
 Made for twitch.tv/ravenhart007
 """
@@ -47,6 +47,7 @@ class Roboraj(object):
         self.irc = irc_.irc(config)
         # start threads for channels that have cron messages to run
         cron.initialize(self.irc, self.crons.crons.get("crons", {}))
+        globals.irc = self.irc
 
     def run(self):
 
