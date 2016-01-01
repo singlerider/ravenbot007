@@ -1,3 +1,5 @@
+import globals
+
 commands = {
 
     '!commands': {
@@ -117,9 +119,9 @@ commands = {
 
     '!gamble': {
         'limit': 0,
-        'argc': 0,
+        'argc': 1,
         'return': 'command',
-        'usage': '!gamble'
+        'usage': '!gamble [points_to_gamble_with]'
     }
 }
 
@@ -128,6 +130,8 @@ user_cooldowns = {"channels": {}}
 
 def initalizeCommands(config):
     for channel in config['channels']:
+        globals.channel_info[channel.lstrip("#")] = {
+            "gamble": {"time": None, "users": {}}}
         user_cooldowns["channels"][channel] = {"commands": {}}
         for command in commands:
             commands[command][channel] = {}

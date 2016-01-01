@@ -10,7 +10,7 @@ class Database:
 
     def __init__(self, name="twitch.db"):
         self.name = name
-        self.con = lite.connect(self.name)
+        self.con = lite.connect(self.name, check_same_thread=False)
 
     def initiate(self):
         with self.con:
