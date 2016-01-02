@@ -38,10 +38,6 @@ class GambleThread(Thread):
         self.irc.send_message(self.channel, end_resp)
         for user in globals.channel_info[self.chan]['gamble']["users"]:
             points = self.g.rob_yield(multiplier=1)
-            if points == 0:
-                points = self.points
-            if bool(random.getrandbits(1)):
-                points *= -1
             self.g.apply_yield(self.chan, user, points)
         sys.exit()
 
@@ -84,7 +80,9 @@ class Gamble:
         elif points_yield <= 5 and points_yield > 1:
             points = random.choice(range(1, 11))
         else:
-            points = 0
+            points = self.points
+        if bool(random.getrandbits(1)):
+            points *= -1
         return points
 
     def apply_yield(self, channel, user, points):
