@@ -5,43 +5,47 @@ TEST_USER = "singlerider"
 
 
 class Cash:
-    def __init__(self):
+    def __init__(self, channel):
         self.db = Database()
+        self.channel = channel
 
-    def add_all(self, channel, points):
-        user_dict, all_users = get_dict_for_users(channel)
-        self.db.add_user(all_users)
+    def add_all(self, points):
+        user_dict, all_users = get_dict_for_users(self.channel)
+        self.db.add_user(all_users, self.channel)
         for user in all_users:
-            self.db.modify_points([user], points)
-        return {"users": all_users, "points": points}
+            self.db.modify_points([user], self.channel, points)
+        return {"users": all_users, "channel": self.channel, "points": points}
 
     def add(self, users, points):
-        self.db.add_user(users)
-        self.db.modify_points(users[0], points)
-        return {"user": users[0], "points": points}
+        self.db.add_user(users, self.channel)
+        self.db.modify_points(users[0], self.channel, points)
+        return {"user": users[0], "channel": self.channel, "points": points}
 
     def modify(self, users, points):
-        self.db.add_user(users)
-        self.db.modify_points(users[0], points)
-        return {"user": users[0], "points": points}
+        self.db.add_user(users, self.channel)
+        self.db.modify_points(users[0], self.channel, points)
+        return {"user": users[0], "channel": self.channel, "points": points}
 
     def get(self, user):
         # (3, u'testuser', 5, u'mod')
-        user_data = self.db.get_user(user)
+        user_data = self.db.get_user(user, self.channel)
         if user_data:
-            return {"user": user_data[1], "points": user_data[2]}
+            return {
+                "user": user_data[1], "channel": self.channel,
+                "points": user_data[2]
+                }
         else:
-            return {"user": user, "points": 0}
+            return {"user": user, "channel": self.channel, "points": 0}
 
 
 def cron(channel):
-    c = Cash()
+    c = Cash(channel)
     points_added_to = c.add_all(channel, 1)
     print "performed points cron"
 
 
 def cash(args):
-    c = Cash()
+    c = Cash(globals.global_channel)
     if len(args) < 1:
         user = globals.CURRENT_USER
         points = c.get(user)["points"]

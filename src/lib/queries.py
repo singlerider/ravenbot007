@@ -18,7 +18,7 @@ class Database:
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS users(
                     id INTEGER PRIMARY KEY,
-                    username TEXT, points INT);
+                    username TEXT, points INT, channel TEXT);
                 """)
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS custom_commands(
@@ -34,39 +34,42 @@ class Database:
                     quote_number INT, game TEXT);
                 """)
 
-    def add_user(self, users):
-        user_tuples = [(x, x) for x in users]
+    def add_user(self, users, channel):
+        user_tuples = [(x, channel, x, channel) for x in users]
+        print user_tuples
         with self.con:
             cur = self.con.cursor()
             cur.executemany("""
-                INSERT INTO users(id, username, points)
-                    SELECT NULL, ?, 0
+                INSERT INTO users(id, username, points, channel)
+                    SELECT NULL, ?, 0, ?
                     WHERE NOT EXISTS(
-                        SELECT 1 FROM users WHERE username = ?);
+                        SELECT 1 FROM users WHERE username = ?
+                        AND channel = ?);
                 """, user_tuples)
 
-    def remove_user(self, user="testuser"):
+    def remove_user(self, user="testuser", channel="testchannel"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
-                DELETE FROM users WHERE username = '%s';
-                """ % user)
+                DELETE FROM users WHERE username = ? and channel = ?;
+                """, [user, channel])
 
-    def get_user(self, user="testuser"):
+    def get_user(self, user="testuser", channel="testchannel"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
-                SELECT * FROM users WHERE username = '%s'
-                """ % user)
+                SELECT * FROM users WHERE username = ? and channel = ?
+                """, [user, channel])
             user_data = cur.fetchone()
             return user_data
 
-    def modify_points(self, user="testuser", points=5):
+    def modify_points(self, user="testuser", channel="testchannel", points=5):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
-                UPDATE users SET points = points + '%d' WHERE username = '%s';
-                """ % (points, user))
+                UPDATE users SET points = points + ? WHERE username = ?
+                    AND channel = ?;
+                """, [points, user, channel])
 
     def add_command(
             self, user="testuser", command="!test",
@@ -152,9 +155,10 @@ class Database:
 
 
 if __name__ == "__main__":
+    channel = "testchannel"
     db = Database("test.db")
     db.initiate()
-    db.add_user(test_users)
+    db.add_user(test_users, channel)
     print db.get_user()
     db.modify_points()
     print db.get_user()
