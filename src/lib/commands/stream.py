@@ -1,4 +1,3 @@
-import src.lib.commands.llama as llama_import
 import globals
 import requests
 import json

@@ -9,7 +9,6 @@ Made for twitch.tv/ravenhart007
 import sys
 from lib.functions_general import *
 from src.lib.twitch import get_dict_for_users
-from src.lib.spam_detector import spam_detector
 from src.lib.queries import Database
 import lib.irc as irc_
 import lib.functions_commands as commands
