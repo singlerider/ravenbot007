@@ -12,8 +12,8 @@ def gamble(args):
     channel = globals.global_channel
     user = globals.CURRENT_USER
     delay = 60
-    if db.get_user(user):
-        if db.get_user(user)[2] < points:
+    if db.get_user(user, channel):
+        if db.get_user(user, channel)[2] < points:
             return "You've only got {0} cash!".format(db.get_user(user)[2])
     else:
         return "You've got no cash!"
