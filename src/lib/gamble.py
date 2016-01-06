@@ -86,4 +86,4 @@ class Gamble:
         return points
 
     def apply_yield(self, channel, user, points):
-        self.db.modify_points(user, points)
+        self.db.modify_points(user, channel, points)

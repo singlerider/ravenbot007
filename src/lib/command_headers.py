@@ -122,6 +122,14 @@ commands = {
         'argc': 1,
         'return': 'command',
         'usage': '!gamble [points_to_gamble_with]'
+    },
+
+    '!chance': {
+        'limit': 0,
+        'argc': 0,
+        'return': 'command',
+        'usage': '!chance',
+        'user_limit': 1800
     }
 }
 

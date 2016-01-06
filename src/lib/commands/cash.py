@@ -60,9 +60,8 @@ def cash(args):
         args = args[0].split(" ")
         action = args[0].lower()
         user = args[1].lower()
-        if globals.CURRENT_USER not in user_dict["chatters"]["moderators"]:
-            if globals.CURRENT_USER != TEST_USER:
-                return "This is a moderator-only command"
+        if globals.CURRENT_USER != globals.global_channel:
+            return
         try:
             delta = int(args[2])
         except:

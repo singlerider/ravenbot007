@@ -36,7 +36,6 @@ class Database:
 
     def add_user(self, users, channel):
         user_tuples = [(x, channel, x, channel) for x in users]
-        print user_tuples
         with self.con:
             cur = self.con.cursor()
             cur.executemany("""
@@ -148,8 +147,9 @@ class Database:
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
-                SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1;
-                """)
+                SELECT * FROM quotes WHERE channel = '%s'
+                    ORDER BY RANDOM() LIMIT 1;
+                """ % channel)
             quote = cur.fetchone()
             return quote
 
