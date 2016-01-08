@@ -130,6 +130,13 @@ commands = {
         'return': 'command',
         'usage': '!chance',
         'user_limit': 1800
+    },
+
+    '!join': {
+        'limit': 0,
+        'argc': 0,
+        'return': 'command',
+        'usage': '!join'
     }
 }
 

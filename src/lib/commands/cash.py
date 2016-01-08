@@ -49,8 +49,7 @@ def cash(args):
     if len(args) < 1:
         user = globals.CURRENT_USER
         points = c.get(user)["points"]
-        return str(points) + " (note - this cash is subject to removal " + \
-            "during this early development cycle) - singlerider"
+        return str(points)
     if len(args[0].split(" ")) == 1:
         user = args[0].lower()
         points = c.get(user)["points"]

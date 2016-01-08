@@ -21,7 +21,13 @@ class GambleThread(Thread):
         self.chan = channel
         self.irc = irc
         self.user = user
-        self.points = points
+        if self.channel not in globals.channel_info:
+            globals.channel_info[self.chan]["gamble"] = {
+                "time": None, "users": {}, "points": 0}
+        globals.channel_info[self.chan]['gamble'] = {
+            "time": time.time(), "users": {
+                self.user: True}, "points": points}
+        self.points = globals.channel_info[self.chan]['gamble']["points"]
         self.g = Gamble(self.chan, self.user, self.points)
 
     def main(self):
@@ -36,9 +42,22 @@ class GambleThread(Thread):
         time.sleep(float(self.delay / 2))
         self.g.terminate_gamble()
         self.irc.send_message(self.channel, end_resp)
-        for user in globals.channel_info[self.chan]['gamble']["users"]:
-            points = self.g.rob_yield(multiplier=1)
-            self.g.apply_yield(self.chan, user, points)
+        participants = globals.channel_info[self.chan]['gamble']["users"]
+        print participants
+        winner = random.choice(participants.keys())
+        winner_points = self.points * (len(participants) - 1)
+        try:
+            del participants[winner]
+        except KeyError:
+            pass
+        print participants, winner, winner_points
+        for participant in participants.keys():
+            print participant, self.points * -1
+            self.g.apply_yield(self.chan, participant, self.points * -1)
+        self.g.apply_yield(self.chan, winner, winner_points)
+        win_resp = "Congratulations, {1}, you won {2} cash!".format(
+            winner, winner_points)
+        self.irc.send_message(self.channel, win_resp)
         sys.exit()
 
 
@@ -53,9 +72,10 @@ class Gamble:
     def initiate_gamble(self):
         if self.channel not in globals.channel_info:
             globals.channel_info[self.channel]["gamble"] = {
-                "time": None, "users": {}}
+                "time": None, "users": {}, "points": 0}
         globals.channel_info[self.channel]['gamble'] = {
-            "time": time.time(), "users": {self.user: self.points}}
+            "time": time.time(), "users": {
+                self.user: True}, "points": self.points}
 
     def terminate_gamble(self):
         globals.channel_info[self.channel]['gamble']["time"] = None
@@ -71,14 +91,14 @@ class Gamble:
             return None
 
     def rob_yield(self, multiplier=1):
-        points_yield = random.choice(range(1, 11)) * multiplier
+        points_yield = random.choice(range(1, 11))
         points = 0
         if points_yield > 9:
-            points = random.choice(range(1, 301))
+            points = random.choice(range(1, 301)) * multiplier
         elif points_yield <= 9 and points_yield > 5:
-            points = random.choice(range(1, 21))
+            points = random.choice(range(1, 21)) * multiplier
         elif points_yield <= 5 and points_yield > 1:
-            points = random.choice(range(1, 11))
+            points = random.choice(range(1, 11)) * multiplier
         else:
             points = self.points
         if bool(random.getrandbits(1)):

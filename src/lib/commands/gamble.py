@@ -9,9 +9,11 @@ def gamble(args):
         points = int(args[0])
     except:
         return "The points you gamble have to be a number!"
+    if points < 10:
+        return "The minimum buy-in amount is 10 cash!"
     channel = globals.global_channel
     user = globals.CURRENT_USER
-    delay = 60
+    delay = 15
     if db.get_user(user, channel):
         if db.get_user(user, channel)[2] < points:
             return "You've only got {0} cash!".format(db.get_user(user)[2])
