@@ -16,7 +16,7 @@ def gamble(args):
     delay = 15
     if db.get_user(user, channel):
         if db.get_user(user, channel)[2] < points:
-            return "You've only got {0} cash!".format(db.get_user(user)[2])
+            return "You don't have enough cash!"
     else:
         return "You've got no cash!"
     g = Gamble(channel)
