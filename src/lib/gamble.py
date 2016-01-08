@@ -55,7 +55,7 @@ class GambleThread(Thread):
             print participant, self.points * -1
             self.g.apply_yield(self.chan, participant, self.points * -1)
         self.g.apply_yield(self.chan, winner, winner_points)
-        win_resp = "Congratulations, {1}, you won {2} cash!".format(
+        win_resp = "Congratulations, {0}, you won {1} cash!".format(
             winner, winner_points)
         self.irc.send_message(self.channel, win_resp)
         sys.exit()
