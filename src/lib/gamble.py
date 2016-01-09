@@ -43,16 +43,13 @@ class GambleThread(Thread):
         self.g.terminate_gamble()
         self.irc.send_message(self.channel, end_resp)
         participants = globals.channel_info[self.chan]['gamble']["users"]
-        print participants
         winner = random.choice(participants.keys())
         winner_points = self.points * (len(participants) - 1)
         try:
             del participants[winner]
         except KeyError:
             pass
-        print participants, winner, winner_points
         for participant in participants.keys():
-            print participant, self.points * -1
             self.g.apply_yield(self.chan, participant, self.points * -1)
         self.g.apply_yield(self.chan, winner, winner_points)
         win_resp = "Congratulations, {0}, you won {1} cash!".format(
@@ -82,7 +79,6 @@ class Gamble:
 
     def check_gamble(self):
         if self.channel not in globals.channel_info:
-            print globals.channel_info
             globals.channel_info[self.channel]["gamble"] = {
                 "time": None, "users": {}}
         if globals.channel_info[self.channel]['gamble']["time"]:

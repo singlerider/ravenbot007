@@ -137,6 +137,13 @@ commands = {
         'argc': 0,
         'return': 'command',
         'usage': '!join'
+    },
+
+    '!pot': {
+        'limit': 0,
+        'argc': 0,
+        'return': 'command',
+        'usage': '!pot'
     }
 }
 
