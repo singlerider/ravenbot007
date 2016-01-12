@@ -37,6 +37,17 @@ class Cash:
         else:
             return {"user": user, "channel": self.channel, "points": 0}
 
+    def rank(self, user):
+        user_data = self.db.get_cash_rank(user, self.channel)
+        if user_data:
+            return {
+                "user": user_data[0], "channel": self.channel,
+                "points": user_data[1], "rank": user_data[3]
+                }
+        else:
+            return {"user": user, "channel": self.channel, "points": 0,
+                        "rank": None}
+
 
 def cron(channel):
     c = Cash(channel)
@@ -52,8 +63,14 @@ def cash(args):
         return str(points)
     if len(args[0].split(" ")) == 1:
         user = args[0].lower()
-        points = c.get(user)["points"]
-        return str(points)
+        rank_data = c.rank(user)
+        if rank_data["rank"] is not None:
+            points = rank_data["points"]
+            rank = rank_data["rank"]
+            resp = "{0} cash, which makes you number {1}!".format(points, rank)
+            return resp
+        else:
+            return "User not found"
     else:
         user_dict, all_users = get_dict_for_users()
         args = args[0].split(" ")
@@ -84,3 +101,23 @@ def cash(args):
                 return "This one is still in progress"
         else:
             return "The first keyword must be either 'add', 'remove', or 'set'"
+
+
+"""
+You will only see the difference if you have ties within a partition.
+
+RANK will assign rows with equal StyleID,ID an equal value whereas ROW_NUMBER will assign them a sequential value.
+
+Example: (All rows have the same StyleID so are in the same partition and within that partition the first 3 rows are tied when ordered by ID)
+
+WITH T(StyleID, ID)
+     AS (SELECT 1,1 UNION ALL
+         SELECT 1,1 UNION ALL
+         SELECT 1,1 UNION ALL
+         SELECT 1,2)
+SELECT *,
+       RANK() OVER(PARTITION BY StyleID ORDER BY ID)       AS 'RANK',
+       ROW_NUMBER() OVER(PARTITION BY StyleID ORDER BY ID) AS 'ROW_NUMBER',
+       DENSE_RANK() OVER(PARTITION BY StyleID ORDER BY ID) AS 'DENSE_RANK'
+FROM   T
+"""

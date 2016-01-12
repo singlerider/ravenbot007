@@ -153,6 +153,24 @@ class Database:
             quote = cur.fetchone()
             return quote
 
+    def get_cash_rank(self, user="testuser", channel="testchannel"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                SELECT a1.username, a1.points, a1.channel,
+                    COUNT (a2.points) points_rank
+                    FROM users a1, users a2
+                    WHERE a1.points < a2.points
+                    OR (a1.points=a2.points
+                    AND a1.username = a2.username)
+                    GROUP BY a1.username, a1.points
+                    HAVING a1.username = ?
+                    AND a1.channel = ?
+                    ORDER BY a1.points DESC, a1.username DESC;
+                """, [user, channel])
+            rank_data = cur.fetchone()
+            return rank_data
+
 
 if __name__ == "__main__":
     channel = "testchannel"
