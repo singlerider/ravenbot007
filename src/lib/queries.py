@@ -190,6 +190,7 @@ if __name__ == "__main__":
     print db.get_command()
     db.add_quote()
     print db.get_quote()
+    print db.get_cash_rank()
     raw_input("press enter to delete the test entries")
     db.remove_command()
     for user in test_users:
