@@ -55,19 +55,24 @@ class Roboraj(object):
             # >> :twitchnotify!twitchnotify@twitchnotify.tmi.twitch.tv PRIVMSG #curvyllama :KiefyWonder just subscribed!
             # Photo_phocus just subscribed to jonsandman!
             # HermanNugent subscribed to JonSandman for 7 months in a row!
-            # first sub points = 100
-            # resub = 50
+            # first sub points = 1000
+            # resub = 250
+            db = Database()
             try:
                 message_split = message.rstrip("!").split()
                 subbed_user = message_split[0]
                 if message_split[1] == "just" and len(message_split) < 4:
-                    # modify_user_points(subbed_user, 100)
+                    points = 1000
+                    db.add_user([user], channel)
+                    db.modify_points(user, channel, points)
                     resp = "/me {0} just subscribed for the first time!".format(
                         subbed_user)
                     self.irc.send_message(channel, resp)
                 elif message_split[1] == "subscribed" and len(message_split) < 9:
                     months_subbed = message_split[3]
-                    # modify_user_points(subbed_user, int(months_subbed) * 100)
+                    points = 250
+                    db.add_user([user], channel)
+                    db.modify_points(user, channel, points)
                     resp = "/me {0} has just resubscribed for {1} months straight!".format(
                         subbed_user, months_subbed)
                     self.irc.send_message(channel, resp)
