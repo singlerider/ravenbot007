@@ -101,23 +101,3 @@ def cash(args):
                 return "This one is still in progress"
         else:
             return "The first keyword must be either 'add', 'remove', or 'set'"
-
-
-"""
-You will only see the difference if you have ties within a partition.
-
-RANK will assign rows with equal StyleID,ID an equal value whereas ROW_NUMBER will assign them a sequential value.
-
-Example: (All rows have the same StyleID so are in the same partition and within that partition the first 3 rows are tied when ordered by ID)
-
-WITH T(StyleID, ID)
-     AS (SELECT 1,1 UNION ALL
-         SELECT 1,1 UNION ALL
-         SELECT 1,1 UNION ALL
-         SELECT 1,2)
-SELECT *,
-       RANK() OVER(PARTITION BY StyleID ORDER BY ID)       AS 'RANK',
-       ROW_NUMBER() OVER(PARTITION BY StyleID ORDER BY ID) AS 'ROW_NUMBER',
-       DENSE_RANK() OVER(PARTITION BY StyleID ORDER BY ID) AS 'DENSE_RANK'
-FROM   T
-"""
