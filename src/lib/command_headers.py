@@ -144,6 +144,13 @@ commands = {
         'argc': 0,
         'return': 'command',
         'usage': '!pot'
+    },
+
+    '!gift': {
+        'limit': 0,
+        'argc': 2,
+        'return': 'command',
+        '!usage': '!gift [username] [amount]'
     }
 }
 

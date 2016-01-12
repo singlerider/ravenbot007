@@ -13,7 +13,7 @@ def gamble(args):
         return "The minimum buy-in amount is 10 cash!"
     channel = globals.global_channel
     user = globals.CURRENT_USER
-    delay = 15
+    delay = 60
     if db.get_user(user, channel):
         if db.get_user(user, channel)[2] < points:
             return "You don't have enough cash!"
