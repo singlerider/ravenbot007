@@ -158,11 +158,11 @@ class Database:
             cur = self.con.cursor()
             cur.execute("""
                 SELECT a1.username, a1.points, a1.channel,
-                    COUNT (a2.points) points_rank
+                        COUNT (a2.points) points_rank
                     FROM users a1, users a2
                     WHERE a1.points < a2.points
-                    OR (a1.points=a2.points
-                    AND a1.username = a2.username)
+                        OR (a1.points=a2.points
+                            AND a1.username = a2.username)
                     GROUP BY a1.username, a1.points
                     HAVING a1.username = ?
                     AND a1.channel = ?
