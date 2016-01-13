@@ -63,16 +63,16 @@ class Roboraj(object):
                 subbed_user = message_split[0]
                 if message_split[1] == "just" and len(message_split) < 4:
                     points = 1000
-                    db.add_user([user], channel)
-                    db.modify_points(user, channel, points)
+                    db.add_user([subbed_user], channel)
+                    db.modify_points(subbed_user, channel, points)
                     resp = "/me {0} just subscribed for the first time!".format(
                         subbed_user)
                     self.irc.send_message(channel, resp)
                 elif message_split[1] == "subscribed" and len(message_split) < 9:
                     months_subbed = message_split[3]
                     points = 250
-                    db.add_user([user], channel)
-                    db.modify_points(user, channel, points)
+                    db.add_user([subbed_user], channel)
+                    db.modify_points(subbed_user, channel, points)
                     resp = "/me {0} has just resubscribed for {1} months straight!".format(
                         subbed_user, months_subbed)
                     self.irc.send_message(channel, resp)
