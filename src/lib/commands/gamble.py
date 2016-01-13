@@ -25,5 +25,4 @@ def gamble(args):
             user] = points
         initialize(channel, user, delay, points)
     else:
-        globals.channel_info[channel]['gamble']["users"][
-            user] = points
+        return "There is already a gamble in progress!"
