@@ -129,8 +129,8 @@ class Database:
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
-                SELECT count(0) FROM quotes WHERE channel = '%s'
-                """ % channel)
+                SELECT count(0) FROM quotes WHERE channel = ?
+                """, [channel])
             count = cur.fetchone()[0]
             cur.execute("""
                 INSERT INTO quotes VALUES (NULL, ?, ?, ?, ?, ?)
@@ -140,16 +140,16 @@ class Database:
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
-                DELETE FROM quotes WHERE channel = '%s'
-                """ % channel)
+                DELETE FROM quotes WHERE channel = ?
+                """, [channel])
 
     def get_quote(self, channel="testchannel"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
-                SELECT * FROM quotes WHERE channel = '%s'
+                SELECT * FROM quotes WHERE channel = ?
                     ORDER BY RANDOM() LIMIT 1;
-                """ % channel)
+                """, [channel])
             quote = cur.fetchone()
             return quote
 
