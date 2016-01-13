@@ -150,7 +150,7 @@ commands = {
         'limit': 0,
         'argc': 2,
         'return': 'command',
-        '!usage': '!gift [username] [amount]'
+        'usage': '!gift [username] [amount]'
     }
 }
 
