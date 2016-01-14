@@ -151,6 +151,14 @@ commands = {
         'argc': 2,
         'return': 'command',
         'usage': '!gift [username] [amount]'
+    },
+
+    '!top10': {
+        'limit': 0,
+        'return': 'command',
+        'user_limit': 60,
+        'usage': "!top10",
+        'argc': 0
     }
 }
 

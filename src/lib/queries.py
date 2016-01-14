@@ -171,6 +171,16 @@ class Database:
             rank_data = cur.fetchone()
             return rank_data
 
+    def get_top10(self, channel="testchannel"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                SELECT * FROM users WHERE channel = ?
+                    ORDER BY points DESC LIMIT 10;
+                """, [channel])
+            rank_data = cur.fetchall()
+            return rank_data
+
 
 if __name__ == "__main__":
     channel = "testchannel"
@@ -191,6 +201,7 @@ if __name__ == "__main__":
     db.add_quote()
     print db.get_quote()
     print db.get_cash_rank()
+    print db.get_top10()
     raw_input("press enter to delete the test entries")
     db.remove_command()
     for user in test_users:
