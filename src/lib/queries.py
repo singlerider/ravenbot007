@@ -33,6 +33,18 @@ class Database:
                     created_by TEXT, quote TEXT,
                     quote_number INT, game TEXT);
                 """)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS channel_info(
+                    id INTEGER PRIMARY KEY, channel TEXT,
+                    stream_id INTEGER DEFAULT 0,
+                    twitch_oauth TEXT DEFAULT '',
+                    twitchalerts_oauth TEXT DEFAULT '');
+                """)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS channel_data(
+                    id INTEGER PRIMARY KEY, channel TEXT,
+                    username TEXT, data_type TEXT);
+                """)
 
     def add_user(self, users, channel):
         user_tuples = [(x, channel, x, channel) for x in users]
@@ -181,6 +193,92 @@ class Database:
             rank_data = cur.fetchall()
             return rank_data
 
+    def get_channel_id(self, channel="testchannel"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                SELECT id, channel FROM channel_info WHERE channel = ?;
+                """, [channel])
+            channel_id = cur.fetchone()
+            return channel_id
+
+    def get_stream_id(self, channel="testchannel"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                SELECT channel, stream_id FROM channel_info WHERE channel = ?;
+                """, [channel])
+            stream_id = cur.fetchone()
+            return stream_id
+
+    def update_stream_id(self, channel="testchannel", stream_id=1234567):
+        cur = self.con.cursor()
+        cur.execute("""
+            UPDATE channel_info SET stream_id = ? WHERE channel = ?;
+            """, [stream_id, channel])
+
+    def add_channel_id(self, id=12345, channel="testchannel"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                INSERT INTO channel_info(
+                    id, channel)
+                    SELECT ?, ?
+                    WHERE NOT EXISTS(
+                        SELECT 1 FROM channel_info
+                            WHERE channel = ?);
+                """, [id, channel, channel])
+
+    def remove_channel_info(self, id=12345, channel="testchannel"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                DELETE FROM channel_info WHERE id = ? OR channel = ?;
+                """, [id, channel])
+
+    def get_channel_data_by_user(self, user="testuser",
+            channel="testchannel", data_type="host"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                SELECT id, channel, username, data_type FROM channel_data
+                    WHERE user = ? AND channel = ? AND data_type = ?;
+                """, [user, channel, data_type])
+            channel_data = cur.fetchall()
+            return channel_data
+
+    def get_channel_data_by_data_type(self, channel="testchannel",
+            data_type="host"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                SELECT id, channel, username, data_type FROM channel_data
+                    WHERE channel = ? AND data_type = ?
+                """, [channel, data_type])
+            channel_data = cur.fetchall()
+            return channel_data
+
+    def insert_channel_data(self, user="testuser", channel="testchannel",
+            data_type="host"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                INSERT INTO channel_data(
+                    id, channel, username, data_type)
+                    SELECT NULL, ?, ?, ?
+                    WHERE NOT EXISTS(
+                        SELECT 1 FROM channel_data
+                            WHERE channel = ? AND username = ?
+                            AND data_type = ?);
+                """, [channel, user, data_type, channel, user, data_type])
+
+    def remove_channel_data(self, channel="testchannel", data_type="host"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                DELETE FROM channel_data WHERE channel = ? AND data_type = ?;
+                """, [channel, data_type])
+
 
 if __name__ == "__main__":
     channel = "testchannel"
@@ -202,8 +300,16 @@ if __name__ == "__main__":
     print db.get_quote()
     print db.get_cash_rank()
     print db.get_top10()
+    print db.get_channel_id()
+    db.add_channel_id()
+    db.update_stream_id()
+    print db.get_channel_id()
+    db.insert_channel_data()
+    print db.get_channel_data_by_data_type()
     raw_input("press enter to delete the test entries")
     db.remove_command()
     for user in test_users:
         db.remove_user(user)
     db.remove_quotes()
+    db.remove_channel_info()
+    db.remove_channel_data()
