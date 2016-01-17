@@ -3,6 +3,7 @@
 src/config/config.py
 globals.py
 *.db
+*.db-journal
 *.json
 *.pkl
 log/*

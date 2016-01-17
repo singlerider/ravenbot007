@@ -57,6 +57,16 @@ def get_stream_status(channel=None):
     if online_data["stream"] != None:
         return True
 
+def get_stream_id(channel):
+    url = 'https://api.twitch.tv/kraken/streams/' + channel
+    resp = requests.get(url=url)
+    data = json.loads(resp.content)
+    if data["stream"] is not None:
+        stream_id = data["stream"]["_id"]
+        stream_id
+    else:
+        return None
+
 
 def get_stream_game(channel):
     url = 'https://api.twitch.tv/kraken/streams/' + channel
@@ -66,6 +76,16 @@ def get_stream_game(channel):
         return data["stream"]["game"]
     else:
         return "Offline"
+
+def get_channel_id(channel):
+    url = "https://api.twitch.tv/kraken/channels/" + channel
+    try:
+        resp = requests.get(url=url)
+        data = json.loads(resp.content)
+        channel_id = data["_id"]
+    except:
+        channel_id = 0
+    return channel_id
 
 
 def get_stream_uptime(channel=None):
