@@ -39,3 +39,9 @@ class ChannelData:
         channel_data = self.db.get_channel_data_by_data_type(self.channel,
                                                           data_type)
         return channel_data
+
+    def insert_channel_data(self, user, data_type):
+        self.db.insert_channel_data(user, self.channel, data_type)
+
+    def remove_channel_data(self, data_type):
+        self.db.remove_channel_data(self.channel, data_type)

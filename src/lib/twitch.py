@@ -54,8 +54,9 @@ def get_stream_status(channel=None):
     get_stream_status_url = 'https://api.twitch.tv/kraken/streams/' + channel
     get_stream_status_resp = requests.get(url=get_stream_status_url)
     online_data = json.loads(get_stream_status_resp.content)
-    if online_data["stream"] != None:
+    if online_data["stream"] is not None:
         return True
+
 
 def get_stream_id(channel):
     url = 'https://api.twitch.tv/kraken/streams/' + channel
@@ -76,6 +77,7 @@ def get_stream_game(channel):
         return data["stream"]["game"]
     else:
         return "Offline"
+
 
 def get_channel_id(channel):
     url = "https://api.twitch.tv/kraken/channels/" + channel
@@ -127,9 +129,9 @@ def get_hosts(channel_id):
     url = "https://tmi.twitch.tv/hosts?include_logins=1&target=" + str(channel_id)
     resp = requests.get(url)
     data = json.loads(resp.content)
-    print data
     hosts = data["hosts"]
     return hosts
+
 
 def get_game_popularity(game):
     try:

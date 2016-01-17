@@ -47,7 +47,7 @@ class Database:
                 """)
 
     def add_user(self, users, channel):
-        user_tuples = [(x, channel, x, channel) for x in users]
+        user_tuples = [(user, channel, user, channel) for user in users]
         with self.con:
             cur = self.con.cursor()
             cur.executemany("""
@@ -241,8 +241,8 @@ class Database:
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
-                SELECT id, channel, username, data_type FROM channel_data
-                    WHERE user = ? AND channel = ? AND data_type = ?;
+                SELECT channel, username, data_type FROM channel_data
+                    WHERE username = ? AND channel = ? AND data_type = ?;
                 """, [user, channel, data_type])
             channel_data = cur.fetchall()
             return channel_data
