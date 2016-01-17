@@ -17,7 +17,7 @@ def cron(channel):
         from src.lib.channel_data import ChannelData
         from src.lib.queries import Database
         cd = ChannelData(channel)
-        if get_stream_status:
+        if get_stream_status():
             channel_id = cd.get_channel_id_from_db()[0]
             hosts = get_hosts(channel_id)
             unthanked_users = []
