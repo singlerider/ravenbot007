@@ -29,9 +29,13 @@ def cron(channel):
                     db.add_user([host["host_login"]], channel)
                     db.modify_points(host["host_login"], channel, 100)
                     unthanked_users.append(host["host_login"])
-            if len(unthanked_users) > 0:
+            if len(unthanked_users) > 1:
                 import globals
-                resp = "The following users are receiving 100 cash for hosting: " + ", ".join(unthanked_users) + "!z"
+                resp = "The following users are receiving 100 cash for hosting: " + ", ".join(unthanked_users) + "!"
+                globals.irc.send_message("#" + channel, resp)
+            elif len(unthanked_users) == 1:
+                user = unthanked_users[0]
+                resp = "Thank you {0} for the host! Here's 100 cash!".format(user)
                 globals.irc.send_message("#" + channel, resp)
         else:
             cd.remove_channel_data("host")
