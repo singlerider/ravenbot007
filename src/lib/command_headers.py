@@ -159,6 +159,13 @@ commands = {
         'user_limit': 60,
         'usage': "!top10",
         'argc': 0
+    },
+
+    '!hosts': {
+        'limit': 0,
+        'return': 'command',
+        'usage': '!hosts',
+        'argc': 0
     }
 }
 

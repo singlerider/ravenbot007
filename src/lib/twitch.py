@@ -123,8 +123,15 @@ def get_stream_followers():
     return data
 
 
-def get_game_popularity(game):
+def get_hosts(channel_id):
+    url = "https://tmi.twitch.tv/hosts?include_logins=1&target=" + str(channel_id)
+    resp = requests.get(url)
+    data = json.loads(resp.content)
+    print data
+    hosts = data["hosts"]
+    return hosts
 
+def get_game_popularity(game):
     try:
         game_http_request = game.replace(' ', '%20')
         url = 'https://api.twitch.tv/kraken/search/streams?q=' + \
