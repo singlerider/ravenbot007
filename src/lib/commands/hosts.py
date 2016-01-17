@@ -16,25 +16,24 @@ def cron(channel):
         from src.lib.twitch import *
         from src.lib.channel_data import ChannelData
         from src.lib.queries import Database
+        cd = ChannelData(channel)
         if get_stream_status:
-            cd = ChannelData(channel)
             channel_id = cd.get_channel_id_from_db()[0]
             hosts = get_hosts(channel_id)
+            unthanked_users = []
             for host in hosts:
                 host_data = cd.get_channel_data_by_user(host["host_login"], "host")
                 if not host_data:
                     cd.insert_channel_data(host["host_login"], "host")
-                    import time
-                    import globals
                     db = Database()
                     db.add_user([host["host_login"]], channel)
                     db.modify_points(host["host_login"], channel, 100)
-                    resp = "Thank you, {0} for hosting! Here's 100 cash!".format(
-                        host)
-                    # TODO fix line below - currently sends no message
-                    # globals.irc.send_message(resp, "#" + channel)
-                    # time.sleep(5)
+                    unthanked_users.append(host["host_login"])
+            if len(unthanked_users) > 0:
+                import globals
+                resp = "The following users are receiving 100 cash for hosting: " + ", ".join(unthanked_users) + "!z"
+                globals.irc.send_message("#" + channel, resp)
         else:
             cd.remove_channel_data("host")
-    except:
-        pass
+    except Exception as error:
+        print error
