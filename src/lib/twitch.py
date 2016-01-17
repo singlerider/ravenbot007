@@ -54,8 +54,10 @@ def get_stream_status(channel=None):
     get_stream_status_url = 'https://api.twitch.tv/kraken/streams/' + channel
     get_stream_status_resp = requests.get(url=get_stream_status_url)
     online_data = json.loads(get_stream_status_resp.content)
-    if online_data["stream"] is not None:
+    if "stream" in online_data:
         return True
+    else:
+        return False
 
 
 def get_stream_id(channel):

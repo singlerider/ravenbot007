@@ -13,7 +13,7 @@ def hosts():
 def cron(channel):
     try:
         channel = channel.lstrip("#")
-        from src.lib.twitch import *
+        from src.lib.twitch import get_stream_status, get_hosts
         from src.lib.channel_data import ChannelData
         from src.lib.queries import Database
         cd = ChannelData(channel)
