@@ -60,6 +60,7 @@ class Roboraj(object):
             # resub = 250
             db = Database()
             try:
+                channel = channel.lstrip("#")
                 message_split = message.rstrip("!").split()
                 subbed_user = message_split[0]
                 if message_split[1] == "just" and len(message_split) < 4:
@@ -122,7 +123,7 @@ class Roboraj(object):
                         message_split = message.split(" ")
                         custom_command(
                             channel, message_split, username, command_data)
-                if username == "twitchnotify":
+                if username == "singlerider":
                     check_for_sub(channel, username, message)
                 part = message.split(' ')[0]
                 valid = False
