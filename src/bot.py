@@ -126,7 +126,7 @@ class Roboraj(object):
                         custom_command(
                             channel, message_split, username, command_data)
                 if username == "twitchnotify":
-                    check_for_sub(channel, username, message)
+                    check_for_sub(channel, username.lower(), message)
                 part = message.split(' ')[0]
                 valid = False
                 if commands.is_valid_command(message):
