@@ -59,11 +59,10 @@ class Roboraj(object):
             # first sub points = 1000
             # resub = 250
             db = Database()
-            print channel, username, message
             try:
                 channel = channel.lstrip("#")
                 message_split = message.rstrip("!").split()
-                subbed_user = message_split[0]
+                subbed_user = message_split[0].lower()
                 if message_split[1] == "just" and len(message_split) < 4:
                     print 1
                     points = 1000
@@ -126,7 +125,7 @@ class Roboraj(object):
                         custom_command(
                             channel, message_split, username, command_data)
                 if username == "twitchnotify":
-                    check_for_sub(channel, username.lower(), message)
+                    check_for_sub(channel, username, message)
                 part = message.split(' ')[0]
                 valid = False
                 if commands.is_valid_command(message):
