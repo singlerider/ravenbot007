@@ -59,17 +59,19 @@ class Roboraj(object):
             # first sub points = 1000
             # resub = 250
             db = Database()
+            print channel, username, message
             try:
                 channel = channel.lstrip("#")
                 message_split = message.rstrip("!").split()
                 subbed_user = message_split[0]
                 if message_split[1] == "just" and len(message_split) < 4:
+                    print 1
                     points = 1000
                     db.add_user([subbed_user], channel)
                     db.modify_points(subbed_user, channel, points)
                     resp = "/me {0} just subscribed for the first time!".format(
                         subbed_user)
-                    self.irc.send_message(channel, resp)
+                    self.irc.send_message("#" + channel, resp)
                 elif message_split[1] == "subscribed" and len(message_split) < 9:
                     months_subbed = message_split[3]
                     points = 250
@@ -77,7 +79,7 @@ class Roboraj(object):
                     db.modify_points(subbed_user, channel, points)
                     resp = "/me {0} has just resubscribed for {1} months straight!".format(
                         subbed_user, months_subbed)
-                    self.irc.send_message(channel, resp)
+                    self.irc.send_message("#" + channel, resp)
             except Exception as error:
                 print error
 
@@ -123,7 +125,7 @@ class Roboraj(object):
                         message_split = message.split(" ")
                         custom_command(
                             channel, message_split, username, command_data)
-                if username == "singlerider":
+                if username == "twitchnotify":
                     check_for_sub(channel, username, message)
                 part = message.split(' ')[0]
                 valid = False
