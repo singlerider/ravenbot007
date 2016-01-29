@@ -7,23 +7,18 @@ Made for twitch.tv/ravenhart007
 """
 
 import sys
-from lib.functions_general import *
-from src.lib.twitch import get_dict_for_users
-from src.lib.queries import Database
-import lib.irc as irc_
-import lib.functions_commands as commands
-import src.lib.command_headers
-import src.lib.twitch as twitch
-import src.lib.cron as cron
-import sys
-import datetime
-import traceback
-import sched
-import time
-import threading
-import os
-import src.config.crons as crons
+
 import globals
+import lib.functions_commands as commands
+import lib.irc as irc_
+import src.config.crons as crons
+import src.lib.command_headers
+import src.lib.cron as cron
+import src.lib.twitch as twitch
+from lib.functions_general import *
+from src.lib.queries import Database
+from src.lib.twitch import get_dict_for_users
+
 reload(sys)
 sys.setdefaultencoding("utf8")
 
@@ -64,20 +59,19 @@ class Roboraj(object):
                 message_split = message.rstrip("!").split()
                 subbed_user = message_split[0].lower()
                 if message_split[1] == "just" and len(message_split) < 4:
-                    print 1
                     points = 1000
                     db.add_user([subbed_user], channel)
                     db.modify_points(subbed_user, channel, points)
-                    resp = "/me {0} just subscribed for the first time!".format(
-                        subbed_user)
+                    resp = "/me {0} just subscribed for the first time!\
+ {1} cash for you!".format(subbed_user, points)
                     self.irc.send_message("#" + channel, resp)
                 elif message_split[1] == "subscribed" and len(message_split) < 9:
                     months_subbed = message_split[3]
                     points = 250
                     db.add_user([subbed_user], channel)
                     db.modify_points(subbed_user, channel, points)
-                    resp = "/me {0} has just resubscribed for {1} months straight!".format(
-                        subbed_user, months_subbed)
+                    resp = "/me {0} has just resubscribed for {1} months \
+straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
                     self.irc.send_message("#" + channel, resp)
             except Exception as error:
                 print error
