@@ -45,8 +45,10 @@ class Cash:
                 "points": user_data[1], "rank": user_data[3]
                 }
         else:
-            return {"user": user, "channel": self.channel, "points": 0,
-                        "rank": None}
+            return {
+                "user": user, "channel": self.channel, "points": 0,
+                "rank": None
+                }
 
 
 def cron(channel):
@@ -56,13 +58,13 @@ def cron(channel):
 
 
 def cash(args):
-    c = Cash(globals.global_channel)
+    c = Cash(globals.CURRENT_CHANNEL)
     if len(args) < 1:
         user = globals.CURRENT_USER
         points = c.get(user)["points"]
         return str(points)
     if len(args[0].split(" ")) == 1:
-        user = args[0].lower()
+        user = args[0].lower().lstrip("@")
         rank_data = c.rank(user)
         if rank_data["rank"] is not None:
             points = rank_data["points"]
@@ -76,7 +78,7 @@ def cash(args):
         args = args[0].split(" ")
         action = args[0].lower()
         user = args[1].lower()
-        if globals.CURRENT_USER != globals.global_channel:
+        if globals.CURRENT_USER != globals.CURRENT_CHANNEL:
             return
         try:
             delta = int(args[2])

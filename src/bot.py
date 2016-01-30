@@ -106,7 +106,7 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
                     continue
                 message_dict = self.irc.get_message(data)
                 channel = message_dict['channel']
-                globals.global_channel = channel.lstrip('#')
+                globals.CURRENT_CHANNEL = channel.lstrip('#')
                 message = message_dict['message']  # .lower()
                 username = message_dict['username']
                 globals.CURRENT_USER = username
@@ -190,7 +190,7 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
                         username, channel, command, user_data, error)
                     f.write(error_message)
         approved_channels = [STREAM_USER, BOT_USER, TEST_USER]
-        if globals.global_channel not in approved_channels:
+        if globals.CURRENT_CHANNEL not in approved_channels:
             prevented_list = []
             if command.lstrip("!") in prevented_list:
                 return

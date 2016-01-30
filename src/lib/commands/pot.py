@@ -1,7 +1,7 @@
 import globals
 
 def pot():
-    channel = globals.global_channel
+    channel = globals.CURRENT_CHANNEL
     current_pot = 0
     try:
         if globals.channel_info[channel]['gamble']["time"] is not None:

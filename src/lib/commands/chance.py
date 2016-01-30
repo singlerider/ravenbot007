@@ -4,7 +4,7 @@ import globals
 
 def chance():
     db = Database()
-    channel = globals.global_channel
+    channel = globals.CURRENT_CHANNEL
     user = globals.CURRENT_USER
     g = Gamble(channel)
     points = abs(g.rob_yield(multiplier=1))

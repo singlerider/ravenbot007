@@ -6,7 +6,7 @@ import globals
 def rem(args):
     db = Database()
     command = args[0].lower()
-    channel = globals.global_channel
+    channel = globals.CURRENT_CHANNEL
     command_data = db.get_command(command, channel)
     if command_data:
         db.remove_command(command, channel)

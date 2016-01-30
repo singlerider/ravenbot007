@@ -4,7 +4,7 @@ import globals
 
 def quote():
     db = Database()
-    channel = globals.global_channel
+    channel = globals.CURRENT_CHANNEL
     # (1, u'testchannel', u'testuser', u'quote', 1, u'testgame')
     quote_data = db.get_quote(channel)
     if quote_data is None:

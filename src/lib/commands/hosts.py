@@ -4,7 +4,7 @@ import globals
 
 
 def hosts():
-    cd = ChannelData(globals.global_channel)
+    cd = ChannelData(globals.CURRENT_CHANNEL)
     channel_id = cd.get_channel_id_from_db()[0]
     hosts = get_hosts(channel_id)
     return "You've got " + str(len(hosts)) + " people hosting you!"

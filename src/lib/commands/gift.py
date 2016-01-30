@@ -4,8 +4,8 @@ import globals
 
 def gift(args):
     user = globals.CURRENT_USER
-    recipient = args[0].lower()
-    channel = globals.global_channel
+    recipient = args[0].lower().lstrip("@")
+    channel = globals.CURRENT_CHANNEL
     try:
         amount = abs(int(args[1]))
     except:

@@ -9,7 +9,7 @@ def add(args):
     user_level = args[1]
     response = " ".join(args[2:])
     creator = globals.CURRENT_USER
-    channel = globals.global_channel
+    channel = globals.CURRENT_CHANNEL
     if command[0] is "!":
         if command not in command_headers.commands:
             if user_level == "reg" or user_level == "mod":

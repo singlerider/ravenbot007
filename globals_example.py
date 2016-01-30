@@ -1,4 +1,4 @@
-global_channel = ""
+CURRENT_CHANNEL = ""
 CURRENT_USER = ""
 VARIABLE = ""
 channel_info = {}
