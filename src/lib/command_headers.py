@@ -89,7 +89,7 @@ commands = {
         'limit': 0,
         'argc': 1,
         'return': 'command',
-        'usage': '!add [command] [user_level("mod"/"reg") [response]]'
+        'usage': '!rem [command]'
     },
 
     '!test': {

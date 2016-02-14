@@ -97,8 +97,6 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
                 self.irc.send_message(channel, resp)
                 db.increment_command(command, chan)
 
-        config = self.config
-
         while True:
             try:
                 data = self.irc.nextMessage()
