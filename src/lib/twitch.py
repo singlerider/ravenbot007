@@ -71,6 +71,14 @@ def get_stream_id(channel):
         return None
 
 
+def get_channel_game(channel):
+    url = "https://api.twitch.tv/kraken/channels/" + channel
+    resp = requests.get(url=url)
+    data = json.loads(resp.content)
+    game = data["game"]
+    return game
+
+
 def get_stream_game(channel):
     url = 'https://api.twitch.tv/kraken/streams/' + channel
     resp = requests.get(url=url)
@@ -142,6 +150,7 @@ def get_game_popularity(game):
             game_http_request + '&limit=100'
         resp = requests.get(url=url)
         data = json.loads(resp.content)
+        print data
         first_streamer = str(data["streams"][0]["channel"]["display_name"])
         second_streamer = str(data["streams"][1]["channel"]["display_name"])
         third_streamer = str(data["streams"][2]["channel"]["display_name"])
@@ -151,7 +160,8 @@ def get_game_popularity(game):
         top_three = first_streamer + ": " + first_viewers + ", " + second_streamer + \
             ": " + second_viewers + ", " + third_streamer + ": " + third_viewers
         return "The top three streamers playing " + game + " are: " + top_three
-    except:
+    except Exception as error:
+        print error
         return "Avoid using special characters and check your spelling."
 
 

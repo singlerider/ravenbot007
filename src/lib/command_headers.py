@@ -20,8 +20,7 @@ commands = {
         'limit': 0,
         'return': 'command',
         'argc': 1,
-        'usage': '!follower [username]',
-        'ul': 'mod'
+        'usage': '!follower [username]'
     },
 
     '!uptime': {
@@ -90,7 +89,7 @@ commands = {
         'limit': 0,
         'argc': 1,
         'return': 'command',
-        'usage': '!add [command] [user_level("mod"/"reg") [response]]'
+        'usage': '!rem [command]'
     },
 
     '!test': {
