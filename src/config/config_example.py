@@ -9,8 +9,8 @@ for channel in channels_to_join:
 
 config = {
     # details required to login to twitch IRC server
-    'server': 'irc.twitch.tv',
-    'port': 6667,
+    'server': 'irc.chat.twitch.tv',
+    'port': 80,
     'username': username,
     # get this from http://twitchapps.com/tmi/
     'oauth_password': oauth_password,
