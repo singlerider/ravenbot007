@@ -9,6 +9,9 @@ def join():
     db = Database()
     g = Gamble(channel)
     if g.check_gamble() is not None:
+        user_is_already_gambling = g.get_gamble_user(user)
+        if user_is_already_gambling:
+            return "You're already gambling. Perhaps you need a 12 step program?"
         points = globals.channel_info[globals.CURRENT_CHANNEL][
             'gamble']["points"]
         if db.get_user(user, channel):

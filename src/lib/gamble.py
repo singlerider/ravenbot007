@@ -86,6 +86,14 @@ class Gamble:
         else:
             return None
 
+    def get_gamble_user(self, user):
+        user_value = globals.channel_info[globals.CURRENT_CHANNEL]['gamble'][
+            "users"].get(user)
+        if user_value:
+            return True
+        else:
+            return False
+
     def rob_yield(self, multiplier=1):
         points_yield = random.choice(range(1, 11))
         points = 0
