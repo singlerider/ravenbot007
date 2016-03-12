@@ -86,14 +86,16 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
             if elements[6] == "mod":
                 user_dict, __ = get_dict_for_users()
                 if username in user_dict["chatters"]["moderators"]:
-                    resp = elements[4].replace("{}", replacement_user)
+                    resp = elements[4].replace("{}", replacement_user).replace(
+                        "[]", str(elements[5]))
                     self.irc.send_message(channel, resp)
                     db.increment_command(command, chan)
                 else:
                     resp = "This is a moderator-only command"
                     self.irc.send_message(channel, resp)
             elif elements[6] == "reg":
-                resp = elements[4].replace("{}", replacement_user)
+                resp = elements[4].replace("{}", replacement_user).replace(
+                    "[]", str(elements[5]))
                 self.irc.send_message(channel, resp)
                 db.increment_command(command, chan)
 

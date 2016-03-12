@@ -75,14 +75,14 @@ commands = {
         'limit': 0,
         'argc': 3,
         'return': 'command',
-        'usage': '!add [command] [user_level("mod"/"reg") [response]]'
+        'usage': '!add [command] [user_level("mod"/"reg") [response (\"{}\" replaces with username, \"[]\" replaces with counter)]'
     },
 
     '!edit': {
         'limit': 0,
         'argc': 3,
         'return': 'command',
-        'usage': '!edit [command] [user_level("mod"/"reg") [response]]'
+        'usage': '!edit [command] [user_level("mod"/"reg") [response (\"{}\" replaces with username, \"[]\" replaces with counter)]'
     },
 
     '!rem': {
