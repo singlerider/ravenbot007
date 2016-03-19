@@ -15,7 +15,7 @@ import src.config.crons as crons
 import src.lib.command_headers
 import src.lib.cron as cron
 import src.lib.twitch as twitch
-from lib.functions_general import *
+from lib.functions_general import pbot
 from src.lib.queries import Database
 from src.lib.twitch import get_dict_for_users
 

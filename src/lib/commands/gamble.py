@@ -11,6 +11,8 @@ def gamble(args):
         return "The points you gamble have to be a number!"
     if points < 10:
         return "The minimum buy-in amount is 10 cash!"
+    if points > 10000:
+        return "That's too rich for my blood. Try a smaller amount"
     channel = globals.CURRENT_CHANNEL
     user = globals.CURRENT_USER
     delay = 60
