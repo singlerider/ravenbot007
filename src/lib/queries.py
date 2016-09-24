@@ -148,6 +148,13 @@ class Database:
                 INSERT INTO quotes VALUES (NULL, ?, ?, ?, ?, ?)
                 """, [channel, user, quote, count + 1, game])
 
+    def remove_quote(self, channel="testchannel", _id=0):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                DELETE FROM quotes WHERE channel = ? AND id = ?
+                """, [channel, _id])
+
     def remove_quotes(self, channel="testchannel"):
         with self.con:
             cur = self.con.cursor()
@@ -161,6 +168,16 @@ class Database:
             cur.execute("""
                 SELECT * FROM quotes WHERE channel = ?
                     ORDER BY RANDOM() LIMIT 1;
+                """, [channel])
+            quote = cur.fetchone()
+            return quote
+
+    def get_most_recent_quote_id(self, channel="testchannel"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                SELECT id FROM quotes WHERE channel = ?
+                    ORDER BY id DESC LIMIT 1;
                 """, [channel])
             quote = cur.fetchone()
             return quote

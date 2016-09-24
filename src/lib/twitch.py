@@ -83,7 +83,7 @@ def get_stream_game(channel):
     url = 'https://api.twitch.tv/kraken/streams/' + channel
     resp = requests.get(url=url)
     data = json.loads(resp.content)
-    if data["stream"] is not None:
+    if "stream" in data and data["stream"] is not None:
         return data["stream"]["game"]
     else:
         return "Offline"
