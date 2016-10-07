@@ -1,9 +1,7 @@
 import globals
 import requests
 import json
-import random
 import datetime
-import time
 
 # making this comment from Github's Oval Office
 
@@ -15,7 +13,7 @@ def get_dict_for_users(channel=None):
     channel = channel.lstrip('#')
     try:
         get_dict_for_users_url = 'http://tmi.twitch.tv/group/user/' + \
-            channel + '/chatters'
+            channel + '/chatters' + "?client_id=" + globals.CLIENT_ID
         get_dict_for_users_resp = requests.get(url=get_dict_for_users_url)
         users = json.loads(get_dict_for_users_resp.content)
         user_dict = users
@@ -38,8 +36,8 @@ def user_cron(channel):
     import json
     import globals
     channel = channel.lstrip("#")
-    get_dict_for_users_url = 'http://tmi.twitch.tv/group/user/{0}/chatters'.format(
-        channel)
+    get_dict_for_users_url = 'http://tmi.twitch.tv/group/user/{0}/chatters{1}'.format(
+        channel, "?client_id=" + globals.CLIENT_ID)
     get_dict_for_users_resp = requests.get(url=get_dict_for_users_url)
     try:
         users = json.loads(get_dict_for_users_resp.content)
@@ -51,7 +49,8 @@ def user_cron(channel):
 def get_stream_status(channel=None):
     if channel is None:
         channel = globals.CURRENT_CHANNEL
-    get_stream_status_url = 'https://api.twitch.tv/kraken/streams/' + channel
+    get_stream_status_url = 'https://api.twitch.tv/kraken/streams/' + \
+        channel + "?client_id=" + globals.CLIENT_ID
     get_stream_status_resp = requests.get(url=get_stream_status_url)
     online_data = json.loads(get_stream_status_resp.content)
     if "stream" in online_data:
@@ -61,7 +60,8 @@ def get_stream_status(channel=None):
 
 
 def get_stream_id(channel):
-    url = 'https://api.twitch.tv/kraken/streams/' + channel
+    url = 'https://api.twitch.tv/kraken/streams/' + \
+        channel + "?client_id=" + globals.CLIENT_ID
     resp = requests.get(url=url)
     data = json.loads(resp.content)
     if data["stream"] is not None:
@@ -72,7 +72,8 @@ def get_stream_id(channel):
 
 
 def get_channel_game(channel):
-    url = "https://api.twitch.tv/kraken/channels/" + channel
+    url = "https://api.twitch.tv/kraken/channels/" + \
+        channel + "?client_id=" + globals.CLIENT_ID
     resp = requests.get(url=url)
     data = json.loads(resp.content)
     game = data["game"]
@@ -80,7 +81,8 @@ def get_channel_game(channel):
 
 
 def get_stream_game(channel):
-    url = 'https://api.twitch.tv/kraken/streams/' + channel
+    url = 'https://api.twitch.tv/kraken/streams/' + \
+        channel + "?client_id=" + globals.CLIENT_ID
     resp = requests.get(url=url)
     data = json.loads(resp.content)
     if "stream" in data and data["stream"] is not None:
@@ -90,7 +92,8 @@ def get_stream_game(channel):
 
 
 def get_channel_id(channel):
-    url = "https://api.twitch.tv/kraken/channels/" + channel
+    url = "https://api.twitch.tv/kraken/channels/" + \
+        channel + "?client_id=" + globals.CLIENT_ID
     try:
         resp = requests.get(url=url)
         data = json.loads(resp.content)
@@ -106,7 +109,7 @@ def get_stream_uptime(channel=None):
     if get_stream_status(channel):
         format = "%Y-%m-%d %H:%M:%S"
         get_stream_uptime_url = 'https://api.twitch.tv/kraken/streams/' + \
-            channel
+            channel + "?client_id=" + globals.CLIENT_ID
         get_stream_uptime_resp = requests.get(url=get_stream_uptime_url)
         uptime_data = json.loads(get_stream_uptime_resp.content)
         start_time = str(uptime_data['stream']['created_at']).replace(
@@ -120,7 +123,7 @@ def get_stream_uptime(channel=None):
 
 def get_offline_status():
     get_offline_status_url = 'https://api.twitch.tv/kraken/streams/' + \
-        globals.CURRENT_CHANNEL
+        globals.CURRENT_CHANNEL + "?client_id=" + globals.CLIENT_ID
     get_offline_status_resp = requests.get(url=get_offline_status_url)
     offline_data = json.loads(get_offline_status_resp.content)
     if offline_data["stream"] != None:
@@ -129,14 +132,15 @@ def get_offline_status():
 
 def get_stream_followers():
     url = 'https://api.twitch.tv/kraken/channels/' + \
-        globals.CURRENT_CHANNEL + '/follows?limit=100'
+        globals.CURRENT_CHANNEL + '/follows?limit=100' + "&client_id=" + globals.CLIENT_ID
     resp = requests.get(url=url)
     data = json.loads(resp.content)
     return data
 
 
 def get_hosts(channel_id):
-    url = "https://tmi.twitch.tv/hosts?include_logins=1&target=" + str(channel_id)
+    url = "https://tmi.twitch.tv/hosts?include_logins=1&target=" + \
+        str(channel_id) + "&client_id=" + globals.CLIENT_ID
     resp = requests.get(url)
     data = json.loads(resp.content)
     hosts = data["hosts"]
@@ -147,7 +151,7 @@ def get_game_popularity(game):
     try:
         game_http_request = game.replace(' ', '%20')
         url = 'https://api.twitch.tv/kraken/search/streams?q=' + \
-            game_http_request + '&limit=100'
+            game_http_request + '&limit=100' + "&client_id=" + globals.CLIENT_ID
         resp = requests.get(url=url)
         data = json.loads(resp.content)
         print data
@@ -167,12 +171,14 @@ def get_game_popularity(game):
 
 def get_follower_status(user):
     try:
-        url = "https://api.twitch.tv/kraken/users/{}/follows/channels/{}".format(user.lower().lstrip("@"), globals.CURRENT_CHANNEL)
+        url = "https://api.twitch.tv/kraken/users/{0}/follows/channels/{1}{2}".format(
+            user.lower().lstrip("@"), globals.CURRENT_CHANNEL,
+            "?client_id=" + globals.CLIENT_ID)
         resp = requests.get(url=url)
         data = json.loads(resp.content)
         months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
                   "Sep", "Oct", "Nov", "Dec"]
-        suffixes = ["st", "nd", "rd", "th",]
+        suffixes = ["st", "nd", "rd", "th", ]
         date_split = data["created_at"][:10].split("-")
         year = date_split[0]
         month = months[int(date_split[1]) - 1]
@@ -188,8 +194,6 @@ def get_follower_status(user):
         else:
             day = day + suffixes[3]
         follower_since = "{} {}, {}".format(month, day, year)
-        notifications = data["notifications"]
-        followers = data["channel"]["followers"]
         return "{} has been following {} since {}.".format(user, globals.CURRENT_CHANNEL, follower_since)
     except:
         return "{} doesn't follow {}.".format(user, globals.CURRENT_CHANNEL)
