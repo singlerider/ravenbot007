@@ -108,6 +108,14 @@ commands = {
         'space_case': True
     },
 
+    '!remquote': {
+        'limit': 0,
+        'argc': 1,
+        'return': 'command',
+        'usage': '!addquote [quote]',
+        'ul': 'mod'
+    },
+
     '!quote': {
         'limit': 0,
         'argc': 0,
