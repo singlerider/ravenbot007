@@ -112,13 +112,15 @@ def get_stream_uptime(channel=None):
             channel + "?client_id=" + globals.CLIENT_ID
         get_stream_uptime_resp = requests.get(url=get_stream_uptime_url)
         uptime_data = json.loads(get_stream_uptime_resp.content)
+        if uptime_data["stream"] is None:
+            return None
         start_time = str(uptime_data['stream']['created_at']).replace(
             "T", " ").replace("Z", "")
         stripped_start_time = datetime.datetime.strptime(start_time, format)
         time_delta = (datetime.datetime.utcnow() - stripped_start_time)
         return str(time_delta).split(".")[0]
     else:
-        return "The streamer is offline, duh."
+        return None
 
 
 def get_offline_status():
