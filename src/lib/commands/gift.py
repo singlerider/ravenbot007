@@ -12,6 +12,10 @@ def gift(args):
         return "Amount has to be a number!"
     if recipient == user:
         return "You can't gift yourself cash!"
+    channel_info = globals.channel_info[channel]
+    if 'gamble' in channel_info and 'time' in channel_info['gamble']:
+        if channel_info['gamble']['time'] is not None:
+            return "Cheater..."
     db = Database()
     if db.get_user(user, channel):
         if db.get_user(user, channel)[2] >= amount and db.get_user(
