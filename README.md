@@ -1,5 +1,5 @@
 Try it out! Code is live at
-http://www.twitch.tv/ravenhart007
+http://www.twitch.tv/ravenhart
 ===============================
 
 # ravenbot007

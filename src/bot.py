@@ -3,7 +3,7 @@ Custom Twitch Chat Moderator Bot for Twitch.tv
 
 By Shane Engelman me@5h4n3.com @shaneengelman
 
-Made for twitch.tv/ravenhart007
+Made for twitch.tv/ravenhart
 """
 
 import sys
@@ -27,7 +27,7 @@ END = False
 
 BOT_USER = "ravenbot007"
 TEST_USER = "singlerider"
-STREAM_USER = "ravenhart007"
+STREAM_USER = "ravenhart"
 
 
 class Roboraj(object):
