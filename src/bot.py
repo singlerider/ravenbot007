@@ -130,7 +130,10 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
                     continue
                 self.handleCommand(part, channel, username, message)
             except Exception as error:
-                print error
+                with open("errors.txt", "a") as f:
+                    error_message = "{0}\n=>{1}".format(
+                        message_dict, error)
+                    f.write(error_message)
 
     def handleCommand(self, command, channel, username, message):
         # parse arguments
