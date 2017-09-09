@@ -3,8 +3,8 @@ import socket
 import re
 import time
 import sys
-from functions_general import *
-import thread
+from .functions_general import *
+import _thread
 
 threshold = 5 * 60  # five minutes, make this whatever you want
 
@@ -20,14 +20,14 @@ class irc:
         while "\r\n" not in self.ircBuffer:
             read = self.sock.recv(1024)
             if not read:
-                print "Connection was lost"
+                print("Connection was lost")
                 self.connect()  # Reconnect.
             else:
-                self.ircBuffer += read
+                self.ircBuffer += read.decode()
 
         line, self.ircBuffer = self.ircBuffer.split("\r\n", 1)
 
-        print ">>", line
+        print((">>", line))
         if line.startswith("PING"):
             self.sock.send(line.replace("PING", "PONG") + "\r\n")
 
@@ -86,8 +86,8 @@ class irc:
         if not message:
             return
 
-        if isinstance(message, basestring):
-            self.sock.send('PRIVMSG %s :%s\r\n' % (channel, message))
+        if isinstance(message, str):
+            self.sock.send(('PRIVMSG %s :%s\r\n' % (channel, message)).encode())
 
         if type(message) == list:
             for line in message.decode("utf8"):
@@ -98,7 +98,7 @@ class irc:
         sock.settimeout(10)
 
         try:
-            print "Connecting to {}:{}".format(self.config['server'], self.config['port'])
+            print(("Connecting to {}:{}".format(self.config['server'], self.config['port'])))
             sock.connect((self.config['server'], self.config['port']))
         except:
             pp('Cannot connect to server (%s:%s).' %
@@ -107,9 +107,9 @@ class irc:
 
         sock.settimeout(None)
 
-        sock.send('USER %s\r\n' % self.config['username'])
-        sock.send('PASS %s\r\n' % self.config['oauth_password'])
-        sock.send('NICK %s\r\n' % self.config['username'])
+        sock.send(('USER %s\r\n' % self.config['username']).encode())
+        sock.send(('PASS %s\r\n' % self.config['oauth_password']).encode())
+        sock.send(('NICK %s\r\n' % self.config['username']).encode())
         self.sock = sock
 
         loginMsg = self.nextMessage()
@@ -117,7 +117,7 @@ class irc:
         # or
         # :tmi.twitch.tv 001 theepicsnail :Welcome, GLHF!
         if "unsuccessful" in loginMsg:
-            print "Failed to login. Check your oath_password and username in src/config/config.py"
+            print("Failed to login. Check your oath_password and username in src/config/config.py")
             sys.exit(1)
 
         # Wait until we're ready before starting stuff.
@@ -131,10 +131,10 @@ class irc:
 
     def join_channels(self, channels):
         pp('Joining channels %s.' % channels)
-        self.sock.send('JOIN %s\r\n' % channels)
+        self.sock.send(('JOIN %s\r\n' % channels).encode())
         pp('Joined channels.')
 
     def leave_channels(self, channels):
         pp('Leaving channels %s,' % channels)
-        self.sock.send('PART %s\r\n' % channels)
+        self.sock.send(('PART %s\r\n' % channels).encode())
         pp('Left channels.')

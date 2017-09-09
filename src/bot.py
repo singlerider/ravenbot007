@@ -9,18 +9,18 @@ Made for twitch.tv/ravenhart
 import sys
 
 import globals
-import lib.functions_commands as commands
-import lib.irc as irc_
+import src.lib.functions_commands as commands
+import src.lib.irc as irc_
 import src.config.crons as crons
 import src.lib.command_headers
 import src.lib.cron as cron
 import src.lib.twitch as twitch
-from lib.functions_general import pbot
+from src.lib.functions_general import pbot
 from src.lib.queries import Database
 from src.lib.twitch import get_dict_for_users
+from importlib import reload
 
 reload(sys)
-sys.setdefaultencoding("utf8")
 
 
 END = False
@@ -74,7 +74,7 @@ class Roboraj(object):
 straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
                     self.irc.send_message("#" + channel, resp)
             except Exception as error:
-                print error
+                print(error)
 
         def custom_command(channel, message, username, elements):
             db = Database()

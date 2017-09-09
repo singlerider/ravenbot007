@@ -13,26 +13,26 @@ class Test:
             "time": None, "users": {}}}}
         n = 1
         while n < 11:
-            print "---------- test #", n, "----------"
+            print(("---------- test #", n, "----------"))
             g = Gamble(channel=self.channel, user="testuser", points=500)
             if not g.check_gamble():
-                print "pass | ", g.check_gamble()
+                print(("pass | ", g.check_gamble()))
             else:
-                print "fail | ", g.check_gamble()
+                print(("fail | ", g.check_gamble()))
             g.initiate_gamble()
             if g.check_gamble():
-                print "pass | ", g.check_gamble()
+                print(("pass | ", g.check_gamble()))
             else:
-                print "fail | ", g.check_gamble()
+                print(("fail | ", g.check_gamble()))
             g.terminate_gamble()
             if not g.check_gamble():
-                print "pass | ", g.check_gamble()
+                print(("pass | ", g.check_gamble()))
             else:
-                print "fail | ", g.check_gamble()
+                print(("fail | ", g.check_gamble()))
             if g.rob_yield():
-                print "pass | ", g.rob_yield()
+                print(("pass | ", g.rob_yield()))
             else:
-                print "fail | ", g.rob_yield()
+                print(("fail | ", g.rob_yield()))
             n += 1
 
 if __name__ == "__main__":

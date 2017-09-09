@@ -1,8 +1,8 @@
 import time
 
 import src.lib.commands
-from commands import *
-from command_headers import *
+from .commands import *
+from .command_headers import *
 import sys
 import traceback
 
@@ -141,7 +141,7 @@ def pass_to_function(command, args):
                 return function(args)
             return function()
     except Exception as error:
-        print >> sys.stdout, str(error)
+        print(str(error), file=sys.stdout)
         traceback.print_exc(file=sys.stdout)
         try:
             return "How to use " + command + ": " + commands[

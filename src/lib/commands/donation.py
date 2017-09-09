@@ -10,7 +10,7 @@ def donation(args):
     try:
         amount = int(float(amount.lstrip("$")))
     except Exception as error:
-        print error
+        print(error)
         return "Amount has to be a number"
     points = int(amount/10) * 750
     c.modify([user], points)

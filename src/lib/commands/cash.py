@@ -54,7 +54,7 @@ class Cash:
 def cron(channel):
     c = Cash(channel)
     points_added_to = c.add_all(channel, 1)
-    print "performed points cron"
+    print("performed points cron")
 
 
 def cash(args):

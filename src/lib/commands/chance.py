@@ -10,7 +10,7 @@ def chance():
     points = abs(g.rob_yield(multiplier=1))
     db.add_user([user], channel)
     db.modify_points(user, channel, points)
-    print user, points, channel
+    print((user, points, channel))
     if points ==  0:
         resp = "Nothing this time! Try again in a half hour?"
     else:

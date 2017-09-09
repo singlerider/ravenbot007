@@ -156,7 +156,7 @@ def get_game_popularity(game):
             game_http_request + '&limit=100' + "&client_id=" + globals.CLIENT_ID
         resp = requests.get(url=url)
         data = json.loads(resp.content)
-        print data
+        print(data)
         first_streamer = str(data["streams"][0]["channel"]["display_name"])
         second_streamer = str(data["streams"][1]["channel"]["display_name"])
         third_streamer = str(data["streams"][2]["channel"]["display_name"])
@@ -167,7 +167,7 @@ def get_game_popularity(game):
             ": " + second_viewers + ", " + third_streamer + ": " + third_viewers
         return "The top three streamers playing " + game + " are: " + top_three
     except Exception as error:
-        print error
+        print(error)
         return "Avoid using special characters and check your spelling."
 
 

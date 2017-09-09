@@ -43,13 +43,13 @@ class GambleThread(Thread):
         self.g.terminate_gamble()
         self.irc.send_message(self.channel, end_resp)
         participants = globals.channel_info[self.chan]['gamble']["users"]
-        winner = random.choice(participants.keys())
+        winner = random.choice(list(participants.keys()))
         winner_points = self.points * (len(participants) - 1)
         try:
             del participants[winner]
         except KeyError:
             pass
-        for participant in participants.keys():
+        for participant in list(participants.keys()):
             self.g.apply_yield(self.chan, participant, self.points * -1)
         self.g.apply_yield(self.chan, winner, winner_points)
         win_resp = "Congratulations, {0}, you won {1} cash!".format(
@@ -95,14 +95,14 @@ class Gamble:
             return False
 
     def rob_yield(self, multiplier=1):
-        points_yield = random.choice(range(1, 11))
+        points_yield = random.choice(list(range(1, 11)))
         points = 0
         if points_yield > 9:
-            points = random.choice(range(1, 301)) * multiplier
+            points = random.choice(list(range(1, 301))) * multiplier
         elif points_yield <= 9 and points_yield > 5:
-            points = random.choice(range(1, 21)) * multiplier
+            points = random.choice(list(range(1, 21))) * multiplier
         elif points_yield <= 5 and points_yield > 1:
-            points = random.choice(range(1, 11)) * multiplier
+            points = random.choice(list(range(1, 11))) * multiplier
         else:
             points = self.points
         if bool(random.getrandbits(1)):

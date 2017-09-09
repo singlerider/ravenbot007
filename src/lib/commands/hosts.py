@@ -44,4 +44,4 @@ def cron(channel):
         else:
             cd.remove_channel_data("host")
     except Exception as error:
-        print error
+        print(error)

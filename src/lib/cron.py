@@ -16,7 +16,7 @@ def initialize_crons(irc, crons):
     #   "#channel": [ (period, enabled, callback),.... ]
     #   ...
     # }
-    for channel, jobs in crons.items():
+    for channel, jobs in list(crons.items()):
         # jobs can be [], False, None...
         if not jobs:
             continue

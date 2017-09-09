@@ -10,6 +10,6 @@ def pot():
         else:
             return "There is no gamble, currently!"
     except Exception as error:
-        print error
+        print(error)
         return "There is no gamble, currently!"
     return "The current pot is {0}! '!join' in!".format(current_pot)
