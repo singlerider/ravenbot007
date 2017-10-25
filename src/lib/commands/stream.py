@@ -10,7 +10,7 @@ def stream():
     get_offline_status_url = 'https://api.twitch.tv/kraken/channels/' + \
         globals.CURRENT_CHANNEL
     get_offline_status_resp = requests.get(url=get_offline_status_url)
-    offline_data = json.loads(get_offline_status_resp.content)
+    offline_data = get_offline_status_resp.json()
 
     try:
         return str("".join(i for i in offline_data["status"] if ord(i) < 128)) + " | " + str(offline_data["display_name"]) + " playing " + str(offline_data["game"])

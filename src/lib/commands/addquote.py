@@ -7,7 +7,7 @@ def addquote(args):
     db = Database()
     user = globals.CURRENT_USER
     channel = globals.CURRENT_CHANNEL
-    quote = str(args[0].strip().strip("\"").strip("\'"), 'utf-8')
+    quote = args[0].strip().strip("\"").strip("\'")
     stripped_quote = str("".join(i for i in quote if ord(i) < 128))
     if len(quote) > 300:
         return "Let's keep it below 300 characters?"
