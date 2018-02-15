@@ -29,7 +29,7 @@ class irc:
 
         print((">>", line))
         if line.startswith("PING"):
-            self.sock.send(line.replace("PING", "PONG") + "\r\n")
+            self.sock.send((line.replace("PING", "PONG") + "\r\n").encode())
 
         return line
 
