@@ -1,5 +1,6 @@
-from src.lib.twitch import *
+import globals
 from src.lib.queries import Database
+from src.lib.twitch import get_dict_for_users
 
 TEST_USER = "singlerider"
 
@@ -53,7 +54,7 @@ class Cash:
 
 def cron(channel):
     c = Cash(channel)
-    points_added_to = c.add_all(channel, 1)
+    c.add_all(channel, 1)
     print("performed points cron")
 
 
