@@ -86,8 +86,8 @@ class Gamble:
         else:
             return None
 
-    def get_gamble_user(self, user):
-        user_value = globals.channel_info[globals.CURRENT_CHANNEL]['gamble'][
+    def get_gamble_user(self, chan, user):
+        user_value = globals.channel_info[chan]['gamble'][
             "users"].get(user)
         if user_value:
             return True

@@ -7,7 +7,7 @@ def join(chan, user, args):
     db = Database()
     g = Gamble(chan)
     if g.check_gamble() is not None:
-        user_is_already_gambling = g.get_gamble_user(user)
+        user_is_already_gambling = g.get_gamble_user(chan, user)
         if user_is_already_gambling:
             return "You're already gambling. Perhaps you need a 12 step program?"
         points = globals.channel_info[chan][
