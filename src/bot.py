@@ -134,6 +134,7 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
                     f.write(error_message)
 
     def handle_command(self, command, channel, username, message):
+        chan = channel.lstrip("#")
         # parse arguments
         # if command is space case then
         #   !foo bar baz
@@ -198,7 +199,7 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
             prevented_list = []
             if command.lstrip("!") in prevented_list:
                 return
-        result = commands.pass_to_function(command, channel, username, args)
+        result = commands.pass_to_function(command, chan, username, args)
         commands.update_last_used(command, channel)
         if result:
             if not isinstance(result, bytes):
