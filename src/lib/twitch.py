@@ -6,10 +6,8 @@ import datetime
 # making this comment from Github's Oval Office
 
 
-def get_dict_for_users(channel=None):
+def get_dict_for_users(channel):
     users = {}
-    if channel is None:
-        channel = globals.CURRENT_CHANNEL
     channel = channel.lstrip('#')
     try:
         get_dict_for_users_url = 'http://tmi.twitch.tv/group/user/' + \
@@ -46,9 +44,7 @@ def user_cron(channel):
         pass
 
 
-def get_stream_status(channel=None):
-    if channel is None:
-        channel = globals.CURRENT_CHANNEL
+def get_stream_status(channel):
     get_stream_status_url = 'https://api.twitch.tv/kraken/streams/' + \
         channel + "?client_id=" + globals.CLIENT_ID
     get_stream_status_resp = requests.get(url=get_stream_status_url)
@@ -103,9 +99,7 @@ def get_channel_id(channel):
     return channel_id
 
 
-def get_stream_uptime(channel=None):
-    if channel is None:
-        channel = globals.CURRENT_CHANNEL
+def get_stream_uptime(channel):
     if get_stream_status(channel):
         format = "%Y-%m-%d %H:%M:%S"
         get_stream_uptime_url = 'https://api.twitch.tv/kraken/streams/' + \
@@ -123,18 +117,18 @@ def get_stream_uptime(channel=None):
         return None
 
 
-def get_offline_status():
+def get_offline_status(channel):
     get_offline_status_url = 'https://api.twitch.tv/kraken/streams/' + \
-        globals.CURRENT_CHANNEL + "?client_id=" + globals.CLIENT_ID
+        channel + "?client_id=" + globals.CLIENT_ID
     get_offline_status_resp = requests.get(url=get_offline_status_url)
     offline_data = get_offline_status_resp.json()
     if offline_data["stream"] != None:
         return True
 
 
-def get_stream_followers():
+def get_stream_followers(channel):
     url = 'https://api.twitch.tv/kraken/channels/' + \
-        globals.CURRENT_CHANNEL + '/follows?limit=100' + "&client_id=" + globals.CLIENT_ID
+        channel + '/follows?limit=100' + "&client_id=" + globals.CLIENT_ID
     resp = requests.get(url=url)
     data = resp.json()
     return data
@@ -171,10 +165,10 @@ def get_game_popularity(game):
         return "Avoid using special characters and check your spelling."
 
 
-def get_follower_status(user):
+def get_follower_status(channel, user):
     try:
         url = "https://api.twitch.tv/kraken/users/{0}/follows/channels/{1}{2}".format(
-            user.lower().lstrip("@"), globals.CURRENT_CHANNEL,
+            user.lower().lstrip("@"), channel,
             "?client_id=" + globals.CLIENT_ID)
         resp = requests.get(url=url)
         data = resp.json()
@@ -196,7 +190,6 @@ def get_follower_status(user):
         else:
             day = day + suffixes[3]
         follower_since = "{} {}, {}".format(month, day, year)
-        return "{} has been following {} since {}.".format(user, globals.CURRENT_CHANNEL, follower_since)
+        return "{} has been following {} since {}.".format(user, channel, follower_since)
     except:
-        return "{} doesn't follow {}.".format(user, globals.CURRENT_CHANNEL)
-
+        return "{} doesn't follow {}.".format(user, channel)

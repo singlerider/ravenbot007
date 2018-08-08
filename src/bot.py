@@ -84,7 +84,7 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
             if len(message) > 1:
                 replacement_user = message[1]
             if elements[6] == "mod":
-                user_dict, __ = get_dict_for_users()
+                user_dict, __ = get_dict_for_users(channel)
                 if username in user_dict["chatters"]["moderators"]:
                     resp = elements[4].replace("{}", replacement_user).replace(
                         "[]", str(elements[5]))

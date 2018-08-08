@@ -74,7 +74,7 @@ def cash(chan, user, args):
         else:
             return "User not found"
     else:
-        user_dict, all_users = get_dict_for_users()
+        user_dict, all_users = get_dict_for_users(chan)
         args = args[0].split(" ")
         action = args[0].lower()
         user = args[1].lower()

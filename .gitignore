@@ -10,3 +10,4 @@ log/*
 src/lib/trivia/*
 src/logs/*
 venv/*
+errors.txt

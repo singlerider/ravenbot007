@@ -2,7 +2,7 @@ from src.lib.twitch import *
 
 
 def followers(chan, user, args):
-    stream_followers = get_stream_followers()
+    stream_followers = get_stream_followers(chan)
     # TODO Refactor as a list comprehension
     follower_list = str(stream_followers["follows"][0]["user"][
         "display_name"]) + ", " + str(
@@ -19,7 +19,7 @@ def followers(chan, user, args):
     mod_return = str(appended_list.count(True)) + \
         "% of the last 100 followers have opted for notifications."
     follower_return = "Most recent followers: " + follower_list + ". "
-    user_dict, all_users = get_dict_for_users()
+    user_dict, all_users = get_dict_for_users(chan)
     if user in user_dict['chatters']['moderators']:
         return follower_return + mod_return
     else:
