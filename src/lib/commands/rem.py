@@ -1,15 +1,13 @@
 from src.lib.queries import Database
 import src.lib.command_headers as command_headers
-import globals
 
 
-def rem(args):
+def rem(chan, user, args):
     db = Database()
     command = args[0].lower()
-    channel = globals.CURRENT_CHANNEL
-    command_data = db.get_command(command, channel)
+    command_data = db.get_command(command, chan)
     if command_data:
-        db.remove_command(command, channel)
+        db.remove_command(command, chan)
         return "{0} removed from Ravenbot007's custom commands!".format(
             command)
     else:

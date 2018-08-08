@@ -1,8 +1,7 @@
 from src.lib.twitch import *
-import globals
 
 
-def uptime():
+def uptime(chan, user, args):
     usage = "!uptime"
     uptime = get_stream_uptime()
     if uptime is not None:

@@ -1,14 +1,12 @@
-import globals
 import requests
 import json
 
 usage = '!stream'
 
 
-def stream():
+def stream(chan, user, args):
 
-    get_offline_status_url = 'https://api.twitch.tv/kraken/channels/' + \
-        globals.CURRENT_CHANNEL
+    get_offline_status_url = 'https://api.twitch.tv/kraken/channels/' + chan
     get_offline_status_resp = requests.get(url=get_offline_status_url)
     offline_data = get_offline_status_resp.json()
 

@@ -1,7 +1,7 @@
 from src.lib.twitch import *
 
 
-def popularity(args):
+def popularity(chan, user, args):
 
     game = args[0]
 

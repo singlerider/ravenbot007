@@ -106,10 +106,8 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
                     continue
                 message_dict = self.irc.get_message(data)
                 channel = message_dict['channel']
-                globals.CURRENT_CHANNEL = channel.lstrip('#')
                 message = message_dict['message']  # .lower()
                 username = message_dict['username']
-                globals.CURRENT_USER = username
                 chan = channel.lstrip("#")
                 if message[0] == "!":
                     command = message.split(" ")[0]
@@ -128,14 +126,14 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
                     valid = True
                 if not valid:
                     continue
-                self.handleCommand(part, channel, username, message)
+                self.handle_command(part, channel, username, message)
             except Exception as error:
                 with open("errors.txt", "a") as f:
                     error_message = "{0}\n=>{1}".format(
                         message_dict, error)
                     f.write(error_message)
 
-    def handleCommand(self, command, channel, username, message):
+    def handle_command(self, command, channel, username, message):
         # parse arguments
         # if command is space case then
         #   !foo bar baz
@@ -159,10 +157,12 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
             return
         if commands.check_has_user_cooldown(command):
             if commands.is_on_user_cooldown(command, channel, username):
-                resp = "Sorry! You've got " + str(
-                    commands.get_user_cooldown_remaining(
-                        command, channel, username)) + \
-                    " seconds before you can do that again, " + username + "!"
+                cooldown_remaining = str(commands.get_user_cooldown_remaining(
+                    command, channel, username))
+                resp = (
+                    f"Sorry! You've got {cooldown_remaining} seconds before "
+                    f"you can do that again, {username}!"
+                )
                 self.irc.send_message(channel, resp)
                 return
             commands.update_user_last_used(command, channel, username)
@@ -188,18 +188,22 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
                         self.irc.send_message(channel, resp)
                         return
             except Exception as error:
+                print(error)
                 with open("errors.txt", "a") as f:
                     error_message = "{0} | {1} : {2}\n{3}\n{4}".format(
                         username, channel, command, user_data, error)
                     f.write(error_message)
         approved_channels = [STREAM_USER, BOT_USER, TEST_USER]
-        if globals.CURRENT_CHANNEL not in approved_channels:
+        if channel not in approved_channels:
             prevented_list = []
             if command.lstrip("!") in prevented_list:
                 return
-        result = commands.pass_to_function(command, args)
+        result = commands.pass_to_function(command, channel, username, args)
         commands.update_last_used(command, channel)
         if result:
-            resp = '(%s) : %s' % (username, result)
+            if not isinstance(result, bytes):
+                result = result.encode()
+            result = result.decode()
+            resp = f"{username}) : {result}"
             pbot(resp, channel)
             self.irc.send_message(channel, resp)

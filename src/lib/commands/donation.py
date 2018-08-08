@@ -1,9 +1,8 @@
 from src.lib.commands.cash import Cash
 import src.lib.twitch as twitch
-import globals
 
 
-def donation(args):
+def donation(chan, user, args):
     c = Cash()
     user = args[0].lower().lstrip("@")
     amount = args[1]

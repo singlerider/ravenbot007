@@ -1,11 +1,11 @@
 import globals
 
-def pot():
-    channel = globals.CURRENT_CHANNEL
+
+def pot(chan, user, args):
     current_pot = 0
     try:
-        if globals.channel_info[channel]['gamble']["time"] is not None:
-            gamble = globals.channel_info[channel]['gamble']
+        if globals.channel_info[chan]['gamble']["time"] is not None:
+            gamble = globals.channel_info[chan]['gamble']
             current_pot = len(gamble["users"]) * gamble["points"]
         else:
             return "There is no gamble, currently!"

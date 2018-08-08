@@ -58,10 +58,9 @@ def cron(channel):
     print("performed points cron")
 
 
-def cash(args):
-    c = Cash(globals.CURRENT_CHANNEL)
+def cash(chan, user, args):
+    c = Cash(chan)
     if len(args) < 1:
-        user = globals.CURRENT_USER
         points = c.get(user)["points"]
         return str(points)
     if len(args[0].split(" ")) == 1:
@@ -79,7 +78,7 @@ def cash(args):
         args = args[0].split(" ")
         action = args[0].lower()
         user = args[1].lower()
-        if globals.CURRENT_USER != globals.CURRENT_CHANNEL:
+        if user != chan:
             return
         try:
             delta = int(args[2])

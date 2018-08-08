@@ -124,7 +124,7 @@ def check_returns_function(command):
         return True
 
 
-def pass_to_function(command, args):
+def pass_to_function(command, channel, username, args):
     try:
         if len(command) < 2:
             command = []
@@ -133,13 +133,12 @@ def pass_to_function(command, args):
         module = getattr(src.lib.commands, command)
         function = getattr(module, command)
         if args:
-            return function(args)
+            return function(channel, username, args)
         else:
-            if check_has_optional_args("!" + command.lstrip("!")):
+            if check_has_optional_args(f"!{command.lstrip('!')}"):
                 function = getattr(module, command)
                 args = []
-                return function(args)
-            return function()
+            return function(channel, username, args)
     except Exception as error:
         print(str(error), file=sys.stdout)
         traceback.print_exc(file=sys.stdout)

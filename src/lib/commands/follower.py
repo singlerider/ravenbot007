@@ -1,7 +1,7 @@
 from src.lib.twitch import get_follower_status
 
 
-def follower(args):
+def follower(chan, user, args):
     user = args[0]
     try:
         return get_follower_status(user)

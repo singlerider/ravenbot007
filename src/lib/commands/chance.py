@@ -1,16 +1,14 @@
 from src.lib.queries import Database
 from src.lib.gamble import Gamble
-import globals
 
-def chance():
+
+def chance(chan, user, args):
     db = Database()
-    channel = globals.CURRENT_CHANNEL
-    user = globals.CURRENT_USER
-    g = Gamble(channel)
+    g = Gamble(chan)
     points = abs(g.rob_yield(multiplier=1))
-    db.add_user([user], channel)
-    db.modify_points(user, channel, points)
-    print((user, points, channel))
+    db.add_user([user], chan)
+    db.modify_points(user, chan, points)
+    print((user, points, chan))
     if points ==  0:
         resp = "Nothing this time! Try again in a half hour?"
     else:

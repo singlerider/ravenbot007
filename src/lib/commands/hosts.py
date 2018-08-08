@@ -1,10 +1,9 @@
 from src.lib.twitch import *
 from src.lib.channel_data import ChannelData
-import globals
 
 
-def hosts():
-    cd = ChannelData(globals.CURRENT_CHANNEL)
+def hosts(chan, user, args):
+    cd = ChannelData(chan)
     channel_id = cd.get_channel_id_from_db()[0]
     hosts = get_hosts(channel_id)
     return "You've got " + str(len(hosts)) + " people hosting you!"
@@ -12,10 +11,11 @@ def hosts():
 
 def cron(channel):
     try:
-        channel = channel.lstrip("#")
+        import globals
         from src.lib.twitch import get_stream_status, get_hosts
         from src.lib.channel_data import ChannelData
         from src.lib.queries import Database
+        channel = channel.lstrip("#")
         cd = ChannelData(channel)
         if get_stream_status():
             channel_id = cd.get_channel_id_from_db()[0]
@@ -34,7 +34,6 @@ def cron(channel):
                 resp = "Thank you {0} for the host! Here's 100 cash!".format(user)
                 globals.irc.send_message("#" + channel, resp)
             elif len(unthanked_users) > 1:
-                import globals
                 resp = "The following users are receiving 100 cash for hosting: " + ", ".join(unthanked_users) + "!"
                 globals.irc.send_message("#" + channel, resp)
             elif len(unthanked_users) > 10:

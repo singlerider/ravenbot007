@@ -1,12 +1,10 @@
 from src.lib.queries import Database
-import globals
 
 
-def quote():
+def quote(chan, user, args):
     db = Database()
-    channel = globals.CURRENT_CHANNEL
     # (1, u'testchannel', u'testuser', u'quote', 1, u'testgame')
-    quote_data = db.get_quote(channel)
+    quote_data = db.get_quote(chan)
     if quote_data is None:
         return "No quotes found. Why not add one with '!addquote [quote]'?"
     else:
