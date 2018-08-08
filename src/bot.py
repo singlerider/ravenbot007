@@ -205,6 +205,6 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
             if not isinstance(result, bytes):
                 result = result.encode()
             result = result.decode()
-            resp = f"{username}) : {result}"
+            resp = f"({username}) : {result}"
             pbot(resp, channel)
             self.irc.send_message(channel, resp)
