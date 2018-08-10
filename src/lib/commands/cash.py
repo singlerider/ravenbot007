@@ -14,7 +14,7 @@ class Cash:
         user_dict, all_users = get_dict_for_users(self.channel)
         self.db.add_user(all_users, self.channel)
         for user in all_users:
-            self.db.modify_points([user], self.channel, points)
+            self.db.modify_points(user, self.channel, points)
         return {"users": all_users, "channel": self.channel, "points": points}
 
     def add(self, users, points):
@@ -60,45 +60,41 @@ def cron(channel):
 
 def cash(chan, user, args):
     c = Cash(chan)
+    if args:
+        args = args[0].split(" ")
     if len(args) < 1:
         points = c.get(user)["points"]
         return str(points)
-    if len(args[0].split(" ")) == 1:
+    elif len(args) == 1:
         user = args[0].lower().lstrip("@")
         rank_data = c.rank(user)
         if rank_data["rank"] is not None:
             points = rank_data["points"]
             rank = rank_data["rank"]
-            resp = "{0} cash, which makes you number {1}!".format(points, rank)
-            return resp
+            return f"{points} cash, which makes you number {rank}!"
         else:
             return "User not found"
     else:
-        user_dict, all_users = get_dict_for_users(chan)
-        args = args[0].split(" ")
         action = args[0].lower()
-        user = args[1].lower()
-        if user != chan:
-            return
+        user_to_give = args[1].lower()
+        if user != chan and user != TEST_USER:
+            return f"Only {chan} can do that."
         try:
             delta = int(args[2])
-        except:
+        except ValueError:
             return "The third keyword must be a number"
         if action == "add" or action == "remove" or action == "set":
             if action == "add":
-                if user == "all":
-                    if len(all_users) < 1:
-                        return "Twitch's backend appears to be down"
-                    for user in all_users:
-                        c.modify([user], delta)
+                if user_to_give == "all":
+                    cash_response = c.add_all(delta)
                     return "Added {0} cash to {1} Conspirators".format(
-                        delta, len(all_users))
+                        delta, len(cash_response["users"]))
                 else:
-                    c.modify([user], abs(delta))
-                    return "Added {0} cash to {1}".format(delta, user)
+                    c.modify([user_to_give], abs(delta))
+                    return "Added {0} cash to {1}".format(delta, user_to_give)
             elif action == "remove":
                 c.modify([user], abs(delta) * -1)
-                return "Removed {0} cash from {1}".format(delta, user)
+                return "Removed {0} cash from {1}".format(delta, user_to_give)
             elif action == "set":
                 return "This one is still in progress"
         else:
