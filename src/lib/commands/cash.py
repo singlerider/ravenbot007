@@ -92,7 +92,7 @@ def cash(chan, user, args):
                     c.modify([user_to_give], abs(delta))
                     return "Added {0} cash to {1}".format(delta, user_to_give)
             elif action == "remove":
-                c.modify([user], abs(delta) * -1)
+                c.modify([user_to_give], abs(delta) * -1)
                 return "Removed {0} cash from {1}".format(delta, user_to_give)
             elif action == "set":
                 return "This one is still in progress"
