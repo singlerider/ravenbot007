@@ -324,7 +324,6 @@ class Database:
             return gamble_entries
 
 
-
 if __name__ == "__main__":
     channel = "testchannel"
     db = Database("test.db")

@@ -100,38 +100,32 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
                 db.increment_command(command, chan)
 
         while True:
-            try:
-                data = self.irc.nextMessage()
-                if not self.irc.check_for_message(data):
-                    continue
-                message_dict = self.irc.get_message(data)
-                channel = message_dict['channel']
-                message = message_dict['message']  # .lower()
-                username = message_dict['username']
-                chan = channel.lstrip("#")
-                if message[0] == "!":
-                    command = message.split(" ")[0]
-                    command_data = self.db.get_command(command, chan)
-                    if command_data:
-                        message_split = message.split(" ")
-                        custom_command(
-                            channel, message_split, username, command_data)
-                if username == "twitchnotify":
-                    check_for_sub(channel, username, message)
-                part = message.split(' ')[0]
-                valid = False
-                if commands.is_valid_command(message):
-                    valid = True
-                if commands.is_valid_command(part):
-                    valid = True
-                if not valid:
-                    continue
-                self.handle_command(part, channel, username, message)
-            except Exception as error:
-                with open("errors.txt", "a") as f:
-                    error_message = "{0}\n=>{1}".format(
-                        message_dict, error)
-                    f.write(error_message)
+            data = self.irc.nextMessage()
+            if not self.irc.check_for_message(data):
+                continue
+            message_dict = self.irc.get_message(data)
+            channel = message_dict['channel']
+            message = message_dict['message']  # .lower()
+            username = message_dict['username']
+            chan = channel.lstrip("#")
+            if message[0] == "!":
+                command = message.split(" ")[0]
+                command_data = self.db.get_command(command, chan)
+                if command_data:
+                    message_split = message.split(" ")
+                    custom_command(
+                        channel, message_split, username, command_data)
+            if username == "twitchnotify":
+                check_for_sub(channel, username, message)
+            part = message.split(' ')[0]
+            valid = False
+            if commands.is_valid_command(message):
+                valid = True
+            if commands.is_valid_command(part):
+                valid = True
+            if not valid:
+                continue
+            self.handle_command(part, channel, username, message)
 
     def handle_command(self, command, channel, username, message):
         chan = channel.lstrip("#")

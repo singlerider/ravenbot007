@@ -41,15 +41,10 @@ class GambleThread(Thread):
         self.g.terminate_gamble()
         self.irc.send_message(self.channel, end_resp)
         participants = globals.channel_info[self.chan]['gamble']["users"]
-        winner = random.choice(list(participants.keys()))
+        winner = random.choice(participants.keys())
         winner_points = self.points * (len(participants) - 1)
-        try:
-            del participants[winner]
-        except KeyError:
-            pass
         completion_time = time.time()
-        for participant in list(participants.keys()):
-            self.g.apply_yield(self.chan, participant, self.points * -1)
+        for participant in participants.keys():
             if len(participants) > 0:  # document the outcome in the db
                 if participant == winner:
                     self.g.add_gamble_database_entry(
@@ -61,7 +56,10 @@ class GambleThread(Thread):
                         self.chan, participant, int(completion_time),
                         (self.points * -1), won=False
                     )
-        self.g.apply_yield(self.chan, winner, winner_points)
+            if participant != winner:
+                self.g.apply_yield(self.chan, participant, self.points * -1)
+            else:
+                self.g.apply_yield(self.chan, winner, winner_points)
         win_resp = "Congratulations, {0}, you won {1} cash!".format(
             winner, winner_points)
         self.irc.send_message(self.channel, win_resp)
