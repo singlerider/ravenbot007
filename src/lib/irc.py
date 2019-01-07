@@ -25,6 +25,14 @@ class irc:
             else:
                 self.ircBuffer += read.decode()
 
+                # Traceback (most recent call last):
+                #   File "./serve.py", line 8, in <module>
+                #     bot = Roboraj(config).run()
+                #   File "/home/ubuntu/git/ravenbot007/src/bot.py", line 103, in run
+                #     data = self.irc.nextMessage()
+                #   File "/home/ubuntu/git/ravenbot007/src/lib/irc.py", line 26, in nextMessage
+                #     self.ircBuffer += read.decode()
+
         line, self.ircBuffer = self.ircBuffer.split("\r\n", 1)
 
         print((">>", line))

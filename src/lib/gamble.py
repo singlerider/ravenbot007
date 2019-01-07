@@ -3,7 +3,6 @@ import random
 import globals
 import time
 from threading import Thread
-import sys
 
 
 def initialize(channel, user, delay, points):
@@ -31,7 +30,6 @@ class GambleThread(Thread):
         self.g = Gamble(self.chan, self.user, self.points)
 
     def main(self):
-        chan = self.channel.lstrip("#")
         begin_resp = "Gambling has begun!"
         end_resp = "Gambling has finished!"
         time_left = "{0} seconds of gambling remain!".format(self.delay / 2)
@@ -49,13 +47,24 @@ class GambleThread(Thread):
             del participants[winner]
         except KeyError:
             pass
+        completion_time = time.time()
         for participant in list(participants.keys()):
             self.g.apply_yield(self.chan, participant, self.points * -1)
+            if len(participants) > 0:  # document the outcome in the db
+                if participant == winner:
+                    self.g.add_gamble_database_entry(
+                        self.chan, participant, int(completion_time),
+                        winner_points, won=True,
+                    )
+                else:
+                    self.g.add_gamble_database_entry(
+                        self.chan, participant, int(completion_time),
+                        (self.points * -1), won=False
+                    )
         self.g.apply_yield(self.chan, winner, winner_points)
         win_resp = "Congratulations, {0}, you won {1} cash!".format(
             winner, winner_points)
         self.irc.send_message(self.channel, win_resp)
-        sys.exit()
 
 
 class Gamble:
@@ -111,3 +120,10 @@ class Gamble:
 
     def apply_yield(self, channel, user, points):
         self.db.modify_points(user, channel, points)
+
+    def add_gamble_database_entry(
+            self, channel, user, timestamp, result, won=False):
+        self.db.add_gamble_entry(
+            user=user, channel=channel, timestamp=timestamp, result=result,
+            won=won
+        )

@@ -1,4 +1,3 @@
-import globals
 from src.lib.queries import Database
 from src.lib.twitch import get_dict_for_users
 

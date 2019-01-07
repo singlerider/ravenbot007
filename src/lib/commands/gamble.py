@@ -7,7 +7,7 @@ def gamble(chan, user, args):
     db = Database()
     try:
         points = int(args[0])
-    except:
+    except ValueError:
         return "The points you gamble have to be a number!"
     if points < 10:
         return "The minimum buy-in amount is 10 cash!"
@@ -21,8 +21,7 @@ def gamble(chan, user, args):
         return "You've got no cash!"
     g = Gamble(chan)
     if g.check_gamble() is None:
-        globals.channel_info[chan]['gamble']["users"][
-            user] = points
+        globals.channel_info[chan]['gamble']["users"][user] = points
         initialize(chan, user, delay, points)
     else:
         return "There is already a gamble in progress!"

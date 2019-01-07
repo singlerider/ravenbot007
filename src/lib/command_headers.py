@@ -173,6 +173,13 @@ commands = {
         'return': 'command',
         'usage': '!hosts',
         'argc': 0
+    },
+
+    '!luck': {
+        'limit': 0,
+        'return': 'command',
+        'usage': '!luck [user]',
+        'argc': 1
     }
 }
 

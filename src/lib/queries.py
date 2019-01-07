@@ -45,6 +45,12 @@ class Database:
                     id INTEGER PRIMARY KEY, channel TEXT,
                     username TEXT, data_type TEXT);
                 """)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS gambles(
+                    id INTEGER PRIMARY KEY, channel TEXT,
+                    username TEXT, timestamp INTEGER, result INTEGER,
+                    won BOOLEAN);
+                """)
 
     def add_user(self, users, channel):
         user_tuples = [(user, channel, user, channel) for user in users]
@@ -253,8 +259,8 @@ class Database:
                 DELETE FROM channel_info WHERE id = ? OR channel = ?;
                 """, [id, channel])
 
-    def get_channel_data_by_user(self, user="testuser",
-            channel="testchannel", data_type="host"):
+    def get_channel_data_by_user(
+            self, user="testuser", channel="testchannel", data_type="host"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
@@ -264,8 +270,8 @@ class Database:
             channel_data = cur.fetchall()
             return channel_data
 
-    def get_channel_data_by_data_type(self, channel="testchannel",
-            data_type="host"):
+    def get_channel_data_by_data_type(
+            self, channel="testchannel", data_type="host"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
@@ -275,8 +281,8 @@ class Database:
             channel_data = cur.fetchall()
             return channel_data
 
-    def insert_channel_data(self, user="testuser", channel="testchannel",
-            data_type="host"):
+    def insert_channel_data(
+            self, user="testuser", channel="testchannel", data_type="host"):
         with self.con:
             cur = self.con.cursor()
             cur.execute("""
@@ -295,6 +301,28 @@ class Database:
             cur.execute("""
                 DELETE FROM channel_data WHERE channel = ? AND data_type = ?;
                 """, [channel, data_type])
+
+    def add_gamble_entry(
+            self, user="testuser", channel="testchannel", timestamp=0,
+            result=0, won=False
+    ):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                INSERT INTO gambles VALUES(
+                    NULL, ?, ?, ?, ?, ?);
+                """, [channel.lower(), user.lower(), timestamp, result, won])
+
+    def get_gamble_user_entries(self, user="testuser", channel="testchannel"):
+        with self.con:
+            cur = self.con.cursor()
+            cur.execute("""
+                SELECT id, channel, username, timestamp, result, won
+                    FROM gambles WHERE channel = ? and username = ?
+            """, [channel.lower(), user.lower()])
+            gamble_entries = cur.fetchall()
+            return gamble_entries
+
 
 
 if __name__ == "__main__":
