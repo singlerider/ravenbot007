@@ -41,11 +41,11 @@ class GambleThread(Thread):
         self.g.terminate_gamble()
         self.irc.send_message(self.channel, end_resp)
         participants = globals.channel_info[self.chan]['gamble']["users"]
-        winner = random.choice(participants.keys())
+        winner = random.choice(list(participants.keys()))
         winner_points = self.points * (len(participants) - 1)
         completion_time = time.time()
-        for participant in participants.keys():
-            if len(participants) > 0:  # document the outcome in the db
+        for participant in list(participants.keys()):
+            if len(participants) > 1:  # document the outcome in the db
                 if participant == winner:
                     self.g.add_gamble_database_entry(
                         self.chan, participant, int(completion_time),
