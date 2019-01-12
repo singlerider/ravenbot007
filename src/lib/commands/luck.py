@@ -23,13 +23,13 @@ def luck(chan, user, args):
     if not args:
         win_ratio = get_user_luck(chan, user)
         return (
-            f"{user}'s win ratio is {win_ratio[0]}% "
+            f"{user}'s win ratio is {win_ratio[0]:.3f}% "
             f"({win_ratio[1]} wins out of {win_ratio[2]})"
         )
     elif user == chan or user == TEST_USER:
         win_ratio = get_user_luck(chan, args[0].lower())
         return (
-            f"{args[0]}'s win ratio is {win_ratio[0]}% "
+            f"{args[0]}'s win ratio is {win_ratio[0]:.3f}% "
             f"({win_ratio[1]} wins out of {win_ratio[2]})"
         )
     else:

@@ -32,7 +32,8 @@ class GambleThread(Thread):
     def main(self):
         begin_resp = "Gambling has begun!"
         end_resp = "Gambling has finished!"
-        time_left = "{0} seconds of gambling remain!".format(self.delay / 2)
+        time_left = "{0} seconds of gambling remain!".format(
+            int(self.delay / 2))
         self.g.initiate_gamble()
         self.irc.send_message(self.channel, begin_resp)
         time.sleep(float(self.delay / 2))
