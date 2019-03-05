@@ -1,6 +1,5 @@
 import globals
 import requests
-import json
 import datetime
 
 # making this comment from Github's Oval Office
@@ -24,23 +23,25 @@ def get_dict_for_users(channel):
             all_users.append(str(user))
         for user in users['chatters']['admins']:
             all_users.append(str(user))
+        for user in users['chatters']['vips']:
+            all_users.append(str(user))
         return user_dict, list(set(all_users))
-    except:
+    except Exception:
         return {}, []
 
 
 def user_cron(channel):
-    import requests
-    import json
     import globals
     channel = channel.lstrip("#")
-    get_dict_for_users_url = 'http://tmi.twitch.tv/group/user/{0}/chatters{1}'.format(
-        channel, "?client_id=" + globals.CLIENT_ID)
+    get_dict_for_users_url = (
+        'http://tmi.twitch.tv/group/user/{0}/chatters{1}'.format(
+            channel, "?client_id=" + globals.CLIENT_ID)
+    )
     get_dict_for_users_resp = requests.get(url=get_dict_for_users_url)
     try:
         users = get_dict_for_users_resp.json()
         globals.channel_info[channel]['viewers'] = users
-    except Exception as error:
+    except Exception:
         pass
 
 
