@@ -65,14 +65,17 @@ def cash(chan, user, args):
         points = c.get(user)["points"]
         return str(points)
     elif len(args) == 1:
-        user = args[0].lower().lstrip("@")
-        rank_data = c.rank(user)
-        if rank_data["rank"] is not None:
-            points = rank_data["points"]
-            rank = rank_data["rank"]
-            return f"{points} cash, which makes you number {rank}!"
+        if user == chan:
+            user = args[0].lower().lstrip("@")
+            rank_data = c.rank(user)
+            if rank_data["rank"] is not None:
+                points = rank_data["points"]
+                rank = rank_data["rank"]
+                return f"{points} cash, which makes you number {rank}!"
+            else:
+                return "User not found"
         else:
-            return "User not found"
+            return f"Only {chan} can do that!"
     else:
         action = args[0].lower()
         user_to_give = args[1].lower()
