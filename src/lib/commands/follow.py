@@ -12,7 +12,7 @@ def follow(chan, user, args):
             f"THANK YOU {name} for the support!!! Go give their page some "
             f"ravenLove at twitch.tv/{name}, especially if you like {game}!"
         ).format(name, game)
-    except:
+    except Exception:
         return (
             f"THANK YOU {name} for the support!!! Go give their page some "
             f"ravenLove at twitch.tv/{name}!"

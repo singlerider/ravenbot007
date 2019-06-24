@@ -176,7 +176,7 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
             user_data, __ = twitch.get_dict_for_users(channel)
             try:
                 if username not in user_data["chatters"]["moderators"]:
-                    if username != TEST_USER:
+                    if username != TEST_USER and username != chan:
                         resp = '(%s) : %s' % (
                             username, "This is a moderator-only command!")
                         pbot(resp, channel)
