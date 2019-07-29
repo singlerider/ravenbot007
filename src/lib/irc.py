@@ -23,15 +23,7 @@ class irc:
                 print("Connection was lost")
                 self.connect()  # Reconnect.
             else:
-                self.ircBuffer += read.decode()
-
-                # Traceback (most recent call last):
-                #   File "./serve.py", line 8, in <module>
-                #     bot = Roboraj(config).run()
-                #   File "/home/ubuntu/git/ravenbot007/src/bot.py", line 103, in run
-                #     data = self.irc.nextMessage()
-                #   File "/home/ubuntu/git/ravenbot007/src/lib/irc.py", line 26, in nextMessage
-                #     self.ircBuffer += read.decode()
+                self.ircBuffer += read.decode("utf-8", "ignore")
 
         line, self.ircBuffer = self.ircBuffer.split("\r\n", 1)
 
@@ -108,7 +100,7 @@ class irc:
         try:
             print(("Connecting to {}:{}".format(self.config['server'], self.config['port'])))
             sock.connect((self.config['server'], self.config['port']))
-        except:
+        except Exception:
             pp('Cannot connect to server (%s:%s).' %
                (self.config['server'], self.config['port']), 'error')
             sys.exit()
@@ -121,7 +113,7 @@ class irc:
         self.sock = sock
 
         loginMsg = self.nextMessage()
-        #:tmi.twitch.tv NOTICE * :Login unsuccessful
+        # :tmi.twitch.tv NOTICE * :Login unsuccessful
         # or
         # :tmi.twitch.tv 001 theepicsnail :Welcome, GLHF!
         if "unsuccessful" in loginMsg:
