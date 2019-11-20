@@ -10,11 +10,12 @@ import sys
 
 import globals
 import src.lib.functions_commands as commands
-import src.lib.irc as irc_
+from src.lib.irc import IRC
 import src.config.crons as crons
 import src.lib.command_headers
 import src.lib.cron as cron
 import src.lib.twitch as twitch
+from datetime import datetime
 from src.lib.functions_general import pbot
 from src.lib.queries import Database
 from src.lib.twitch import get_dict_for_users
@@ -38,7 +39,7 @@ class Roboraj(object):
         self.config = config
         self.crons = crons
         src.lib.command_headers.initalizeCommands(config)
-        self.irc = irc_.irc(config)
+        self.irc = IRC(config)
         # start threads for channels that have cron messages to run
         cron.initialize_crons(self.irc, self.crons.crons.get("crons", {}))
         cron.initialize_channel_id_check(self.config)
@@ -47,12 +48,6 @@ class Roboraj(object):
     def run(self):
 
         def check_for_sub(channel, username, message):
-            # >> :twitchnotify!twitchnotify@twitchnotify.tmi.twitch.tv PRIVMSG #curvyllama :KiefyWonder subscribed for 5 months in a row!
-            # >> :twitchnotify!twitchnotify@twitchnotify.tmi.twitch.tv PRIVMSG #curvyllama :KiefyWonder just subscribed!
-            # Photo_phocus just subscribed to jonsandman!
-            # HermanNugent subscribed to JonSandman for 7 months in a row!
-            # first sub points = 1000
-            # resub = 250
             db = Database()
             try:
                 channel = channel.lstrip("#")
@@ -100,13 +95,15 @@ straight and is getting {2} cash!".format(subbed_user, months_subbed, points)
                 db.increment_command(command, chan)
 
         while True:
-            data = self.irc.nextMessage()
+            data = self.irc.nextMessage("chat")
             if not self.irc.check_for_message(data):
                 continue
             message_dict = self.irc.get_message(data)
             channel = message_dict['channel']
             message = message_dict['message']  # .lower()
             username = message_dict['username']
+            timestamp = datetime.now()
+            print(f"{timestamp} {channel} | {username} | {message}")
             chan = channel.lstrip("#")
             if message[0] == "!":
                 command = message.split(" ")[0]
