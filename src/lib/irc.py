@@ -29,7 +29,11 @@ class IRC:
             else:
                 self.ircBuffer[kind] += read.decode()
 
-        line, self.ircBuffer[kind] = self.ircBuffer[kind].split("\r\n", 1)
+        try:
+            line, self.ircBuffer[kind] = self.ircBuffer[kind].split("\r\n", 1)
+        except ValueError:
+            print(self.ircBuffer[kind])
+            line, self.ircBuffer[kind] = "", ""
 
         if line is not None:
             if line.startswith("PING"):
