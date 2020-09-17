@@ -27,7 +27,10 @@ class IRC:
                 self.sock[kind].close
                 self.connect(kind)
             else:
-                self.ircBuffer[kind] += read.decode()
+                try:
+                    self.ircBuffer[kind] += read.decode()
+                except UnicodeDecodeError:
+                    pass
 
         try:
             line, self.ircBuffer[kind] = self.ircBuffer[kind].split("\r\n", 1)
