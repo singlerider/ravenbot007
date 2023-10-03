@@ -106,11 +106,11 @@ class Gamble:
         points_yield = random.choice(list(range(1, 11)))
         points = 0
         if points_yield > 9:
-            points = random.choice(list(range(1, 301))) * multiplier
+            points = random.choice(list(range(250, 10000))) * multiplier
         elif points_yield <= 9 and points_yield > 5:
-            points = random.choice(list(range(1, 21))) * multiplier
+            points = random.choice(list(range(50, 250))) * multiplier
         elif points_yield <= 5 and points_yield > 1:
-            points = random.choice(list(range(1, 11))) * multiplier
+            points = random.choice(list(range(1, 50))) * multiplier
         else:
             points = self.points
         if bool(random.getrandbits(1)):
